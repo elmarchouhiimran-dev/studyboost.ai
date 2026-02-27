@@ -3,66 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Boost</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        .dark { background-color: #121212; color: #ffffff; }
-        .light { background-color: #ffffff; color: #000000; }
-        .toggle-btn { position: fixed; top: 10px; right: 10px; }
-    </style>
+    <title>Study Boost AI</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="react.bundle.js" defer></script>
+    <script src="main.js" defer></script>
 </head>
 <body>
-    <button class="toggle-btn">Toggle Dark Mode</button>
-    <h1>Welcome to Study Boost</h1>
-    <div id="flashcards"></div>
-    <div id="quiz"></div>
-
+    <div id="root"></div>
     <script>
-        let isDarkMode = localStorage.getItem('isDarkMode') === 'true';
-        document.body.className = isDarkMode ? 'dark' : 'light';
-        const toggleBtn = document.querySelector('.toggle-btn');
-
-        toggleBtn.addEventListener('click', () => {
-            isDarkMode = !isDarkMode;
-            localStorage.setItem('isDarkMode', isDarkMode);
-            document.body.className = isDarkMode ? 'dark' : 'light';
-        });
-
-        // AI flashcards generation
-        async function generateFlashcards() {
-            try {
-                const response = await fetch('YOUR_API_ENDPOINT'); // Update with actual endpoint
-                const data = await response.json();
-                // Render flashcards
-                document.getElementById('flashcards').innerHTML = renderFlashcards(data);
-            } catch (error) {
-                console.error('Error generating flashcards:', error);
-            }
-        }
-
-        function renderFlashcards(data) {
-            return data.map(card => `<div>${card.question} - ${card.answer}</div>`).join('');
-        }
-
-        // AI quiz generation
-        async function generateQuiz() {
-            try {
-                const response = await fetch('YOUR_API_ENDPOINT'); // Update with actual endpoint
-                const data = await response.json();
-                // Render quiz
-                document.getElementById('quiz').innerHTML = renderQuiz(data);
-            } catch (error) {
-                console.error('Error generating quiz:', error);
-            }
-        }
-
-        function renderQuiz(data) {
-            return data.map(q => `<div>${q.question}</div>`).join('');
-        }
-
-        // Initial calls
-        generateFlashcards();
-        generateQuiz();
+        // React components, translations, dark mode support, and Gemini AI integration
     </script>
 </body>
 </html>

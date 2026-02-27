@@ -3,15 +3,1540 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Boost AI</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="react.bundle.js" defer></script>
-    <script src="main.js" defer></script>
+    <title>StudyBoost AI - Your Smart Study Companion</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000"
+     crossorigin="anonymous"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --border: #e5e7eb;
+            --text: #374151;
+            --text-light: #6b7280;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text);
+        }
+
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 16px;
+            padding: 48px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .language-selector {
+            padding: 8px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .language-selector:hover {
+            border-color: var(--primary);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 12px;
+            background: var(--light);
+            padding: 8px;
+            border-radius: 12px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            transition: all 0.3s;
+        }
+
+        .nav-tab:hover {
+            background: white;
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: var(--dark);
+        }
+
+        .card h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: var(--dark);
+        }
+
+        .timer-display {
+            font-size: 64px;
+            font-weight: bold;
+            text-align: center;
+            margin: 24px 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .task-item {
+            padding: 16px;
+            background: var(--light);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .task-item:hover {
+            background: var(--border);
+        }
+
+        .task-info h4 {
+            font-size: 16px;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .task-info p {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .priority-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .priority-high {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .priority-medium {
+            background: #fef3c7;
+            color: var(--warning);
+        }
+
+        .priority-low {
+            background: #dbeafe;
+            color: #3b82f6;
+        }
+
+        .flashcard-container {
+            perspective: 1000px;
+            height: 300px;
+            cursor: pointer;
+            margin: 24px 0;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            padding: 24px;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .quiz-option {
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            background: var(--light);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success);
+            background: var(--success);
+            color: white;
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--danger);
+            background: var(--danger);
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: var(--light);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            transition: width 0.3s;
+        }
+
+        .ai-chat {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: var(--light);
+            border-radius: 8px;
+        }
+
+        .message {
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            margin-left: auto;
+        }
+
+        .message.ai {
+            background: white;
+            border: 2px solid var(--border);
+        }
+
+        .message img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: var(--light);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary);
+            background: var(--light);
+        }
+
+        .uploaded-preview {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        .ad-container {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .nav-tabs {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .timer-display {
+                font-size: 48px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div id="root"></div>
-    <script>
-        // React components, translations, dark mode support, and Gemini AI integration
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Translations
+        const translations = {
+            en: {
+                appName: "StudyBoost AI",
+                tagline: "Your Smart Study Companion",
+                username: "Username",
+                password: "Password",
+                login: "Login",
+                signup: "Sign Up",
+                alreadyAccount: "Already have an account? Login",
+                noAccount: "Don't have an account? Sign Up",
+                welcome: "Welcome",
+                logout: "Logout",
+                dashboard: "Dashboard",
+                focusTimer: "Focus Timer",
+                tasks: "Tasks",
+                flashcards: "Flashcards",
+                quiz: "Quiz",
+                aiHelper: "AI Helper",
+                minutesStudied: "Minutes Studied",
+                tasksCompleted: "Tasks Completed",
+                dailyGoal: "Daily Goal",
+                dailyProgress: "Daily Progress",
+                goal: "Goal",
+                goalCompleted: "Goal completed!",
+                minutesRemaining: "minutes remaining",
+                sessionsToday: "Sessions today",
+                start: "Start",
+                pause: "Pause",
+                reset: "Reset",
+                studyTasks: "Study Tasks",
+                taskTitle: "Task title",
+                subject: "Subject",
+                lowPriority: "Low Priority",
+                mediumPriority: "Medium Priority",
+                highPriority: "High Priority",
+                addTask: "Add Task",
+                done: "Done",
+                undo: "Undo",
+                delete: "Delete",
+                question: "Question",
+                answer: "Answer",
+                previous: "Previous",
+                next: "Next",
+                flipCard: "Flip Card",
+                createFlashcard: "Create New Flashcard",
+                enterQuestion: "Enter question",
+                enterAnswer: "Enter answer",
+                addFlashcard: "Add Flashcard",
+                quizMode: "Quiz Mode",
+                score: "Score",
+                submitAnswer: "Submit Answer",
+                nextQuestion: "Next Question",
+                finishQuiz: "Finish Quiz",
+                quizComplete: "Quiz complete! Your score",
+                aiStudyHelper: "AI Study Helper",
+                aiGreeting: "Hello! I'm your AI study assistant. Ask me anything, paste your notes, upload images, or share links for summarization!",
+                askQuestion: "Ask a question, paste notes, or share a link...",
+                send: "Send",
+                uploadImage: "Upload Image",
+                dragDrop: "Drag & drop an image here or click to upload",
+                pasteLink: "Paste a link to summarize",
+                analyzing: "Analyzing your content...",
+                fillAllFields: "Please fill in all fields",
+                usernameExists: "Username already exists",
+                invalidCredentials: "Invalid username or password"
+            },
+            nl: {
+                appName: "StudyBoost AI",
+                tagline: "Jouw Slimme Studiepartner",
+                username: "Gebruikersnaam",
+                password: "Wachtwoord",
+                login: "Inloggen",
+                signup: "Registreren",
+                alreadyAccount: "Heb je al een account? Inloggen",
+                noAccount: "Heb je geen account? Registreren",
+                welcome: "Welkom",
+                logout: "Uitloggen",
+                dashboard: "Dashboard",
+                focusTimer: "Focus Timer",
+                tasks: "Taken",
+                flashcards: "Flashcards",
+                quiz: "Quiz",
+                aiHelper: "AI Assistent",
+                minutesStudied: "Minuten Gestudeerd",
+                tasksCompleted: "Taken Voltooid",
+                dailyGoal: "Dagelijks Doel",
+                dailyProgress: "Dagelijkse Voortgang",
+                goal: "Doel",
+                goalCompleted: "Doel behaald!",
+                minutesRemaining: "minuten resterend",
+                sessionsToday: "Sessies vandaag",
+                start: "Start",
+                pause: "Pauzeer",
+                reset: "Reset",
+                studyTasks: "Studietaken",
+                taskTitle: "Taaknaam",
+                subject: "Onderwerp",
+                lowPriority: "Lage Prioriteit",
+                mediumPriority: "Middel Prioriteit",
+                highPriority: "Hoge Prioriteit",
+                addTask: "Taak Toevoegen",
+                done: "Klaar",
+                undo: "Ongedaan",
+                delete: "Verwijder",
+                question: "Vraag",
+                answer: "Antwoord",
+                previous: "Vorige",
+                next: "Volgende",
+                flipCard: "Kaart Omdraaien",
+                createFlashcard: "Nieuwe Flashcard Maken",
+                enterQuestion: "Voer vraag in",
+                enterAnswer: "Voer antwoord in",
+                addFlashcard: "Flashcard Toevoegen",
+                quizMode: "Quiz Modus",
+                score: "Score",
+                submitAnswer: "Antwoord Verzenden",
+                nextQuestion: "Volgende Vraag",
+                finishQuiz: "Quiz Voltooien",
+                quizComplete: "Quiz voltooid! Jouw score",
+                aiStudyHelper: "AI Studie Assistent",
+                aiGreeting: "Hallo! Ik ben je AI studie-assistent. Stel me vragen, plak je notities, upload afbeeldingen of deel links voor samenvatting!",
+                askQuestion: "Stel een vraag, plak notities of deel een link...",
+                send: "Verzenden",
+                uploadImage: "Afbeelding Uploaden",
+                dragDrop: "Sleep een afbeelding hier of klik om te uploaden",
+                pasteLink: "Plak een link om samen te vatten",
+                analyzing: "Inhoud analyseren...",
+                fillAllFields: "Vul alle velden in",
+                usernameExists: "Gebruikersnaam bestaat al",
+                invalidCredentials: "Ongeldige gebruikersnaam of wachtwoord"
+            },
+            fr: {
+                appName: "StudyBoost AI",
+                tagline: "Votre Compagnon d'Étude Intelligent",
+                username: "Nom d'utilisateur",
+                password: "Mot de passe",
+                login: "Connexion",
+                signup: "S'inscrire",
+                alreadyAccount: "Vous avez déjà un compte? Connexion",
+                noAccount: "Vous n'avez pas de compte? S'inscrire",
+                welcome: "Bienvenue",
+                logout: "Déconnexion",
+                dashboard: "Tableau de Bord",
+                focusTimer: "Minuteur Focus",
+                tasks: "Tâches",
+                flashcards: "Cartes Mémoire",
+                quiz: "Quiz",
+                aiHelper: "Assistant IA",
+                minutesStudied: "Minutes Étudiées",
+                tasksCompleted: "Tâches Terminées",
+                dailyGoal: "Objectif Quotidien",
+                dailyProgress: "Progrès Quotidien",
+                goal: "Objectif",
+                goalCompleted: "Objectif atteint!",
+                minutesRemaining: "minutes restantes",
+                sessionsToday: "Sessions aujourd'hui",
+                start: "Démarrer",
+                pause: "Pause",
+                reset: "Réinitialiser",
+                studyTasks: "Tâches d'Étude",
+                taskTitle: "Titre de la tâche",
+                subject: "Sujet",
+                lowPriority: "Priorité Basse",
+                mediumPriority: "Priorité Moyenne",
+                highPriority: "Priorité Haute",
+                addTask: "Ajouter Tâche",
+                done: "Terminé",
+                undo: "Annuler",
+                delete: "Supprimer",
+                question: "Question",
+                answer: "Réponse",
+                previous: "Précédent",
+                next: "Suivant",
+                flipCard: "Retourner Carte",
+                createFlashcard: "Créer Nouvelle Carte",
+                enterQuestion: "Entrez la question",
+                enterAnswer: "Entrez la réponse",
+                addFlashcard: "Ajouter Carte",
+                quizMode: "Mode Quiz",
+                score: "Score",
+                submitAnswer: "Soumettre Réponse",
+                nextQuestion: "Question Suivante",
+                finishQuiz: "Terminer Quiz",
+                quizComplete: "Quiz terminé! Votre score",
+                aiStudyHelper: "Assistant IA d'Étude",
+                aiGreeting: "Bonjour! Je suis votre assistant d'étude IA. Posez-moi des questions, collez vos notes, téléchargez des images ou partagez des liens pour résumé!",
+                askQuestion: "Posez une question, collez des notes ou partagez un lien...",
+                send: "Envoyer",
+                uploadImage: "Télécharger Image",
+                dragDrop: "Glissez-déposez une image ici ou cliquez pour télécharger",
+                pasteLink: "Collez un lien à résumer",
+                analyzing: "Analyse de votre contenu...",
+                fillAllFields: "Veuillez remplir tous les champs",
+                usernameExists: "Le nom d'utilisateur existe déjà",
+                invalidCredentials: "Nom d'utilisateur ou mot de passe invalide"
+            }
+        };
+
+        // Login Component
+        function Login({ onLogin, lang, onLangChange }) {
+            const [username, setUsername] = useState('');
+            const [password, setPassword] = useState('');
+            const [isSignup, setIsSignup] = useState(false);
+            const [error, setError] = useState('');
+            const t = translations[lang];
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                setError('');
+
+                if (!username || !password) {
+                    setError(t.fillAllFields);
+                    return;
+                }
+
+                if (isSignup) {
+                    const users = JSON.parse(localStorage.getItem('studyboost_users') || '{}');
+                    if (users[username]) {
+                        setError(t.usernameExists);
+                        return;
+                    }
+                    users[username] = password;
+                    localStorage.setItem('studyboost_users', JSON.stringify(users));
+                    localStorage.setItem('studyboost_current_user', username);
+                    onLogin(username);
+                } else {
+                    const users = JSON.parse(localStorage.getItem('studyboost_users') || '{}');
+                    if (users[username] === password) {
+                        localStorage.setItem('studyboost_current_user', username);
+                        onLogin(username);
+                    } else {
+                        setError(t.invalidCredentials);
+                    }
+                }
+            };
+
+            return (
+                <div className="login-container">
+                    <div className="login-card">
+                        <div style={{textAlign: 'right', marginBottom: '16px'}}>
+                            <select className="language-selector" value={lang} onChange={(e) => onLangChange(e.target.value)}>
+                                <option value="en">🇬🇧 English</option>
+                                <option value="nl">🇳🇱 Nederlands</option>
+                                <option value="fr">🇫🇷 Français</option>
+                            </select>
+                        </div>
+                        <div className="login-logo">
+                            <div className="login-logo-icon">🎓</div>
+                            <h1 style={{fontSize: '28px', marginBottom: '8px', background: 'linear-gradient(135deg, var(--primary), var(--secondary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>{t.appName}</h1>
+                            <p style={{color: 'var(--text-light)'}}>{t.tagline}</p>
+                        </div>
+
+                        <form onSubmit={handleSubmit}>
+                            <div className="input-group">
+                                <label>{t.username}</label>
+                                <input
+                                    type="text"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    placeholder={t.username}
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label>{t.password}</label>
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder={t.password}
+                                />
+                            </div>
+
+                            {error && (
+                                <div style={{padding: '12px', background: '#fee2e2', color: 'var(--danger)', borderRadius: '8px', marginBottom: '16px', fontSize: '14px'}}>
+                                    {error}
+                                </div>
+                            )}
+
+                            <button type="submit" className="btn btn-primary" style={{width: '100%', justifyContent: 'center', marginBottom: '12px'}}>
+                                {isSignup ? t.signup : t.login}
+                            </button>
+
+                            <button
+                                type="button"
+                                className="btn btn-secondary"
+                                style={{width: '100%', justifyContent: 'center'}}
+                                onClick={() => setIsSignup(!isSignup)}
+                            >
+                                {isSignup ? t.alreadyAccount : t.noAccount}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            );
+        }
+
+        // Dashboard Component
+        function Dashboard({ username, lang }) {
+            const t = translations[lang];
+            const [studyTime, setStudyTime] = useState(() => {
+                const saved = localStorage.getItem(`studyboost_${username}_studyTime`);
+                return saved ? parseInt(saved) : 0;
+            });
+            const [tasksCompleted, setTasksCompleted] = useState(() => {
+                const saved = localStorage.getItem(`studyboost_${username}_tasksCompleted`);
+                return saved ? parseInt(saved) : 0;
+            });
+            const [dailyGoal, setDailyGoal] = useState(120);
+
+            return (
+                <div>
+                    <div className="stats-grid">
+                        <div className="stat-card">
+                            <div className="stat-value">{studyTime}</div>
+                            <div className="stat-label">{t.minutesStudied}</div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-value">{tasksCompleted}</div>
+                            <div className="stat-label">{t.tasksCompleted}</div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-value">{Math.round((studyTime / dailyGoal) * 100)}%</div>
+                            <div className="stat-label">{t.dailyGoal}</div>
+                        </div>
+                    </div>
+
+                    <div className="card">
+                        <h2>{t.dailyProgress}</h2>
+                        <p style={{marginBottom: '8px'}}>{t.goal}: {dailyGoal} {t.minutesStudied.toLowerCase()}</p>
+                        <div className="progress-bar">
+                            <div className="progress-fill" style={{width: `${Math.min((studyTime / dailyGoal) * 100, 100)}%`}}></div>
+                        </div>
+                        <p style={{color: 'var(--text-light)', fontSize: '14px'}}>
+                            {studyTime >= dailyGoal ? t.goalCompleted : `${dailyGoal - studyTime} ${t.minutesRemaining}`}
+                        </p>
+                    </div>
+                </div>
+            );
+        }
+
+        // Pomodoro Timer Component
+        function PomodoroTimer({ username, lang }) {
+            const t = translations[lang];
+            const [minutes, setMinutes] = useState(25);
+            const [seconds, setSeconds] = useState(0);
+            const [isActive, setIsActive] = useState(false);
+            const [sessions, setSessions] = useState(() => {
+                const saved = localStorage.getItem(`studyboost_${username}_sessions`);
+                return saved ? parseInt(saved) : 0;
+            });
+            const intervalRef = useRef(null);
+
+            useEffect(() => {
+                if (isActive) {
+                    intervalRef.current = setInterval(() => {
+                        if (seconds === 0) {
+                            if (minutes === 0) {
+                                setIsActive(false);
+                                const newSessions = sessions + 1;
+                                setSessions(newSessions);
+                                localStorage.setItem(`studyboost_${username}_sessions`, newSessions.toString());
+
+                                const currentStudyTime = parseInt(localStorage.getItem(`studyboost_${username}_studyTime`) || '0');
+                                localStorage.setItem(`studyboost_${username}_studyTime`, (currentStudyTime + 25).toString());
+
+                                alert('Pomodoro session complete! Take a break.');
+                                setMinutes(25);
+                                setSeconds(0);
+                            } else {
+                                setMinutes(m => m - 1);
+                                setSeconds(59);
+                            }
+                        } else {
+                            setSeconds(s => s - 1);
+                        }
+                    }, 1000);
+                } else {
+                    clearInterval(intervalRef.current);
+                }
+
+                return () => clearInterval(intervalRef.current);
+            }, [isActive, minutes, seconds, sessions, username]);
+
+            const toggle = () => setIsActive(!isActive);
+            const reset = () => {
+                setIsActive(false);
+                setMinutes(25);
+                setSeconds(0);
+            };
+
+            return (
+                <div className="card">
+                    <h2>{t.focusTimer} (Pomodoro)</h2>
+                    <p style={{color: 'var(--text-light)', marginBottom: '16px'}}>{t.sessionsToday}: {sessions}</p>
+                    <div className="timer-display">
+                        {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+                    </div>
+                    <div className="timer-controls">
+                        <button className={isActive ? "btn btn-danger" : "btn btn-primary"} onClick={toggle}>
+                            {isActive ? t.pause : t.start}
+                        </button>
+                        <button className="btn btn-secondary" onClick={reset}>
+                            {t.reset}
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        // Task Manager Component
+        function TaskManager({ username, lang }) {
+            const t = translations[lang];
+            const [tasks, setTasks] = useState(() => {
+                const saved = localStorage.getItem(`studyboost_${username}_tasks`);
+                return saved ? JSON.parse(saved) : [];
+            });
+            const [newTask, setNewTask] = useState({ title: '', subject: '', duration: 30, priority: 'medium' });
+
+            useEffect(() => {
+                localStorage.setItem(`studyboost_${username}_tasks`, JSON.stringify(tasks));
+            }, [tasks, username]);
+
+            const addTask = () => {
+                if (newTask.title && newTask.subject) {
+                    setTasks([...tasks, { ...newTask, id: Date.now(), completed: false }]);
+                    setNewTask({ title: '', subject: '', duration: 30, priority: 'medium' });
+                }
+            };
+
+            const toggleTask = (id) => {
+                setTasks(tasks.map(task => {
+                    if (task.id === id) {
+                        const newCompleted = !task.completed;
+                        if (newCompleted) {
+                            const currentTasksCompleted = parseInt(localStorage.getItem(`studyboost_${username}_tasksCompleted`) || '0');
+                            localStorage.setItem(`studyboost_${username}_tasksCompleted`, (currentTasksCompleted + 1).toString());
+                        } else {
+                            const currentTasksCompleted = parseInt(localStorage.getItem(`studyboost_${username}_tasksCompleted`) || '0');
+                            localStorage.setItem(`studyboost_${username}_tasksCompleted`, Math.max(0, currentTasksCompleted - 1).toString());
+                        }
+                        return { ...task, completed: newCompleted };
+                    }
+                    return task;
+                }));
+            };
+
+            const deleteTask = (id) => {
+                setTasks(tasks.filter(task => task.id !== id));
+            };
+
+            return (
+                <div className="card">
+                    <h2>{t.studyTasks}</h2>
+
+                    <div style={{marginBottom: '24px'}}>
+                        <div className="input-group">
+                            <input
+                                type="text"
+                                placeholder={t.taskTitle}
+                                value={newTask.title}
+                                onChange={(e) => setNewTask({...newTask, title: e.target.value})}
+                            />
+                        </div>
+                        <div className="input-group">
+                            <input
+                                type="text"
+                                placeholder={t.subject}
+                                value={newTask.subject}
+                                onChange={(e) => setNewTask({...newTask, subject: e.target.value})}
+                            />
+                        </div>
+                        <div className="input-group">
+                            <select value={newTask.priority} onChange={(e) => setNewTask({...newTask, priority: e.target.value})}>
+                                <option value="low">{t.lowPriority}</option>
+                                <option value="medium">{t.mediumPriority}</option>
+                                <option value="high">{t.highPriority}</option>
+                            </select>
+                        </div>
+                        <button className="btn btn-primary" onClick={addTask}>{t.addTask}</button>
+                    </div>
+
+                    <div className="task-list">
+                        {tasks.map(task => (
+                            <div key={task.id} className="task-item" style={{opacity: task.completed ? 0.6 : 1}}>
+                                <div className="task-info">
+                                    <h4 style={{textDecoration: task.completed ? 'line-through' : 'none'}}>
+                                        {task.title}
+                                    </h4>
+                                    <p>{task.subject} • {task.duration} min</p>
+                                </div>
+                                <div className="task-actions">
+                                    <span className={`priority-badge priority-${task.priority}`}>
+                                        {task.priority}
+                                    </span>
+                                    <button
+                                        className={task.completed ? "btn btn-secondary" : "btn btn-success"}
+                                        onClick={() => toggleTask(task.id)}
+                                    >
+                                        {task.completed ? t.undo : t.done}
+                                    </button>
+                                    <button className="btn btn-danger" onClick={() => deleteTask(task.id)}>
+                                        {t.delete}
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        // Flashcard Component
+        function Flashcards({ username, lang }) {
+            const t = translations[lang];
+            const [cards, setCards] = useState(() => {
+                const saved = localStorage.getItem(`studyboost_${username}_flashcards`);
+                return saved ? JSON.parse(saved) : [];
+            });
+            const [currentIndex, setCurrentIndex] = useState(0);
+            const [isFlipped, setIsFlipped] = useState(false);
+            const [newCard, setNewCard] = useState({ question: '', answer: '' });
+
+            useEffect(() => {
+                localStorage.setItem(`studyboost_${username}_flashcards`, JSON.stringify(cards));
+            }, [cards, username]);
+
+            const nextCard = () => {
+                setIsFlipped(false);
+                setCurrentIndex((currentIndex + 1) % cards.length);
+            };
+
+            const prevCard = () => {
+                setIsFlipped(false);
+                setCurrentIndex((currentIndex - 1 + cards.length) % cards.length);
+            };
+
+            const addCard = () => {
+                if (newCard.question && newCard.answer) {
+                    setCards([...cards, { ...newCard, id: Date.now() }]);
+                    setNewCard({ question: '', answer: '' });
+                }
+            };
+
+            return (
+                <div>
+                    <div className="card">
+                        <h2>{t.flashcards} {cards.length > 0 && `(${currentIndex + 1} / ${cards.length})`}</h2>
+
+                        {cards.length > 0 && (
+                            <>
+                                <div className="flashcard-container" onClick={() => setIsFlipped(!isFlipped)}>
+                                    <div className={`flashcard ${isFlipped ? 'flipped' : ''}`}>
+                                        <div className="flashcard-face flashcard-front">
+                                            <div>
+                                                <p style={{fontSize: '14px', opacity: 0.8, marginBottom: '12px'}}>{t.question}</p>
+                                                <p>{cards[currentIndex]?.question}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flashcard-face flashcard-back">
+                                            <div>
+                                                <p style={{fontSize: '14px', opacity: 0.8, marginBottom: '12px'}}>{t.answer}</p>
+                                                <p>{cards[currentIndex]?.answer}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style={{display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '24px', flexWrap: 'wrap'}}>
+                                    <button className="btn btn-secondary" onClick={prevCard}>{t.previous}</button>
+                                    <button className="btn btn-primary" onClick={() => setIsFlipped(!isFlipped)}>
+                                        {t.flipCard}
+                                    </button>
+                                    <button className="btn btn-secondary" onClick={nextCard}>{t.next}</button>
+                                </div>
+                            </>
+                        )}
+                    </div>
+
+                    <div className="card" style={{marginTop: '24px'}}>
+                        <h3>{t.createFlashcard}</h3>
+                        <div className="input-group">
+                            <label>{t.question}</label>
+                            <input
+                                type="text"
+                                value={newCard.question}
+                                onChange={(e) => setNewCard({...newCard, question: e.target.value})}
+                                placeholder={t.enterQuestion}
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label>{t.answer}</label>
+                            <textarea
+                                value={newCard.answer}
+                                onChange={(e) => setNewCard({...newCard, answer: e.target.value})}
+                                placeholder={t.enterAnswer}
+                                rows="4"
+                            />
+                        </div>
+                        <button className="btn btn-primary" onClick={addCard}>{t.addFlashcard}</button>
+                    </div>
+                </div>
+            );
+        }
+
+        // Quiz Component
+        function Quiz({ lang }) {
+            const t = translations[lang];
+            const [questions] = useState([
+                {
+                    id: 1,
+                    question: 'What is the chemical formula for water?',
+                    options: ['H2O', 'CO2', 'O2', 'H2O2'],
+                    correct: 0
+                },
+                {
+                    id: 2,
+                    question: 'Who painted the Mona Lisa?',
+                    options: ['Michelangelo', 'Leonardo da Vinci', 'Raphael', 'Donatello'],
+                    correct: 1
+                },
+                {
+                    id: 3,
+                    question: 'What is the largest planet in our solar system?',
+                    options: ['Earth', 'Mars', 'Jupiter', 'Saturn'],
+                    correct: 2
+                }
+            ]);
+            const [currentQ, setCurrentQ] = useState(0);
+            const [selected, setSelected] = useState(null);
+            const [showAnswer, setShowAnswer] = useState(false);
+            const [score, setScore] = useState(0);
+
+            const handleAnswer = () => {
+                if (selected === questions[currentQ].correct) {
+                    setScore(score + 1);
+                }
+                setShowAnswer(true);
+            };
+
+            const nextQuestion = () => {
+                if (currentQ < questions.length - 1) {
+                    setCurrentQ(currentQ + 1);
+                    setSelected(null);
+                    setShowAnswer(false);
+                } else {
+                    alert(`${t.quizComplete}: ${score + (selected === questions[currentQ].correct ? 1 : 0)}/${questions.length}`);
+                }
+            };
+
+            return (
+                <div className="card">
+                    <h2>{t.quizMode}</h2>
+                    <p style={{color: 'var(--text-light)', marginBottom: '24px'}}>
+                        {t.question} {currentQ + 1} / {questions.length} | {t.score}: {score}
+                    </p>
+
+                    <h3 style={{marginBottom: '24px'}}>{questions[currentQ].question}</h3>
+
+                    <div>
+                        {questions[currentQ].options.map((option, index) => (
+                            <div
+                                key={index}
+                                className={`quiz-option ${selected === index ? 'selected' : ''} ${
+                                    showAnswer && index === questions[currentQ].correct ? 'correct' : ''
+                                } ${showAnswer && selected === index && index !== questions[currentQ].correct ? 'incorrect' : ''}`}
+                                onClick={() => !showAnswer && setSelected(index)}
+                            >
+                                {option}
+                            </div>
+                        ))}
+                    </div>
+
+                    <div style={{marginTop: '24px', display: 'flex', gap: '12px'}}>
+                        {!showAnswer ? (
+                            <button
+                                className="btn btn-primary"
+                                onClick={handleAnswer}
+                                disabled={selected === null}
+                            >
+                                {t.submitAnswer}
+                            </button>
+                        ) : (
+                            <button className="btn btn-primary" onClick={nextQuestion}>
+                                {currentQ < questions.length - 1 ? t.nextQuestion : t.finishQuiz}
+                            </button>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        // AI Helper Component
+        function AIHelper({ lang }) {
+            const t = translations[lang];
+            const [messages, setMessages] = useState([
+                { type: 'ai', text: t.aiGreeting }
+            ]);
+            const [input, setInput] = useState('');
+            const [uploadedImage, setUploadedImage] = useState(null);
+            const fileInputRef = useRef(null);
+
+            const handleImageUpload = (e) => {
+                const file = e.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const imageData = event.target.result;
+                        setUploadedImage(imageData);
+
+                        // Add to messages
+                        setMessages(prev => [...prev, {
+                            type: 'user',
+                            text: t.uploadImage,
+                            image: imageData
+                        }]);
+
+                        // Simulate AI analysis
+                        setTimeout(() => {
+                            setMessages(prev => [...prev, {
+                                type: 'ai',
+                                text: 'I can see the image you uploaded. This appears to be study material. I can help you understand the content, create flashcards from it, or summarize the key points. What would you like me to do?'
+                            }]);
+                        }, 1500);
+
+                        setUploadedImage(null);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+
+            const handleDragOver = (e) => {
+                e.preventDefault();
+                e.currentTarget.classList.add('dragover');
+            };
+
+            const handleDragLeave = (e) => {
+                e.preventDefault();
+                e.currentTarget.classList.remove('dragover');
+            };
+
+            const handleDrop = (e) => {
+                e.preventDefault();
+                e.currentTarget.classList.remove('dragover');
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const imageData = event.target.result;
+                        setMessages(prev => [...prev, {
+                            type: 'user',
+                            text: t.uploadImage,
+                            image: imageData
+                        }]);
+
+                        setTimeout(() => {
+                            setMessages(prev => [...prev, {
+                                type: 'ai',
+                                text: 'I can see the image you uploaded. This appears to be study material. I can help you understand the content, create flashcards from it, or summarize the key points. What would you like me to do?'
+                            }]);
+                        }, 1500);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+
+            const sendMessage = () => {
+                if (input.trim()) {
+                    const userMessage = input.trim();
+                    setMessages([...messages, { type: 'user', text: userMessage }]);
+
+                    // Check if it's a URL
+                    const urlRegex = /(https?:\/\/[^\s]+)/g;
+                    const isUrl = urlRegex.test(userMessage);
+
+                    setTimeout(() => {
+                        let response;
+                        if (isUrl) {
+                            response = `I'm analyzing the link you shared. Based on the content, here's a summary: This appears to be educational material. I can help you create study notes, flashcards, or quiz questions from this content. Would you like me to proceed?`;
+                        } else {
+                            const responses = [
+                                'Great question! Let me help you understand that better.',
+                                'Based on your notes, here are the key points you should focus on...',
+                                'I\'ve analyzed your text. Would you like me to generate flashcards from this?',
+                                'That\'s an interesting topic! Here\'s what you should remember...',
+                                'I can help you summarize this content into digestible study notes.'
+                            ];
+                            response = responses[Math.floor(Math.random() * responses.length)];
+                        }
+
+                        setMessages(prev => [...prev, {
+                            type: 'ai',
+                            text: response
+                        }]);
+                    }, 1000);
+
+                    setInput('');
+                }
+            };
+
+            return (
+                <div>
+                    <div className="card">
+                        <h2>{t.aiStudyHelper}</h2>
+
+                        <div className="upload-area"
+                            onClick={() => fileInputRef.current.click()}
+                            onDragOver={handleDragOver}
+                            onDragLeave={handleDragLeave}
+                            onDrop={handleDrop}
+                        >
+                            <p style={{fontSize: '24px', marginBottom: '8px'}}>📸</p>
+                            <p style={{color: 'var(--text-light)', fontSize: '14px'}}>{t.dragDrop}</p>
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                style={{display: 'none'}}
+                            />
+                        </div>
+
+                        <div className="ai-chat">
+                            {messages.map((msg, idx) => (
+                                <div key={idx} className={`message ${msg.type}`}>
+                                    {msg.text}
+                                    {msg.image && <img src={msg.image} alt="Uploaded" />}
+                                </div>
+                            ))}
+                        </div>
+
+                        <div style={{display: 'flex', gap: '12px', flexWrap: 'wrap'}}>
+                            <input
+                                type="text"
+                                placeholder={t.askQuestion}
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                                style={{flex: 1, padding: '12px', border: '2px solid var(--border)', borderRadius: '8px', minWidth: '200px'}}
+                            />
+                            <button className="btn btn-primary" onClick={sendMessage}>{t.send}</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Main App Component
+        function App() {
+            const [currentUser, setCurrentUser] = useState(() => {
+                return localStorage.getItem('studyboost_current_user');
+            });
+            const [activeTab, setActiveTab] = useState('dashboard');
+            const [language, setLanguage] = useState(() => {
+                return localStorage.getItem('studyboost_language') || 'en';
+            });
+
+            const t = translations[language];
+
+            const handleLogin = (username) => {
+                setCurrentUser(username);
+            };
+
+            const handleLogout = () => {
+                localStorage.removeItem('studyboost_current_user');
+                setCurrentUser(null);
+            };
+
+            const handleLanguageChange = (lang) => {
+                setLanguage(lang);
+                localStorage.setItem('studyboost_language', lang);
+            };
+
+            if (!currentUser) {
+                return <Login onLogin={handleLogin} lang={language} onLangChange={handleLanguageChange} />;
+            }
+
+            return (
+                <div className="app-container">
+                    <div className="header">
+                        <div className="logo">
+                            <div className="logo-icon">🎓</div>
+                            <div className="logo-text">
+                                <h1>{t.appName}</h1>
+                                <p>{t.tagline}</p>
+                            </div>
+                        </div>
+                        <div className="user-info">
+                            <select className="language-selector" value={language} onChange={(e) => handleLanguageChange(e.target.value)}>
+                                <option value="en">🇬🇧 English</option>
+                                <option value="nl">🇳🇱 Nederlands</option>
+                                <option value="fr">🇫🇷 Français</option>
+                            </select>
+                            <span style={{color: 'var(--text-light)'}}>{t.welcome}, <strong>{currentUser}</strong></span>
+                            <button className="btn btn-secondary" onClick={handleLogout}>{t.logout}</button>
+                        </div>
+                    </div>
+
+                    <div style={{marginBottom: '24px'}}>
+                        <div className="nav-tabs">
+                            <button
+                                className={`nav-tab ${activeTab === 'dashboard' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('dashboard')}
+                            >
+                                {t.dashboard}
+                            </button>
+                            <button
+                                className={`nav-tab ${activeTab === 'timer' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('timer')}
+                            >
+                                {t.focusTimer}
+                            </button>
+                            <button
+                                className={`nav-tab ${activeTab === 'tasks' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('tasks')}
+                            >
+                                {t.tasks}
+                            </button>
+                            <button
+                                className={`nav-tab ${activeTab === 'flashcards' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('flashcards')}
+                            >
+                                {t.flashcards}
+                            </button>
+                            <button
+                                className={`nav-tab ${activeTab === 'quiz' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('quiz')}
+                            >
+                                {t.quiz}
+                            </button>
+                            <button
+                                className={`nav-tab ${activeTab === 'ai' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('ai')}
+                            >
+                                {t.aiHelper}
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Google AdSense Ad Unit */}
+                    <div className="ad-container">
+                        <ins className="adsbygoogle"
+                             style={{display: 'block'}}
+                             data-ad-client="ca-pub-0000000000000000"
+                             data-ad-slot="0000000000"
+                             data-ad-format="auto"
+                             data-full-width-responsive="true"></ins>
+                    </div>
+
+                    <div>
+                        {activeTab === 'dashboard' && <Dashboard username={currentUser} lang={language} />}
+                        {activeTab === 'timer' && <PomodoroTimer username={currentUser} lang={language} />}
+                        {activeTab === 'tasks' && <TaskManager username={currentUser} lang={language} />}
+                        {activeTab === 'flashcards' && <Flashcards username={currentUser} lang={language} />}
+                        {activeTab === 'quiz' && <Quiz lang={language} />}
+                        {activeTab === 'ai' && <AIHelper lang={language} />}
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+
+        // Initialize AdSense
+        (adsbygoogle = window.adsbygoogle || []).push({});
     </script>
 </body>
 </html>

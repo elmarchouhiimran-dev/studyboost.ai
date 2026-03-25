@@ -1,1542 +1,616 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyBoost AI - Your Smart Study Companion</title>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000"
-     crossorigin="anonymous"></script>
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #8b5cf6;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --dark: #1f2937;
-            --light: #f9fafb;
-            --border: #e5e7eb;
-            --text: #374151;
-            --text-light: #6b7280;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: var(--text);
-        }
-
-        .login-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .login-card {
-            background: white;
-            border-radius: 16px;
-            padding: 48px;
-            max-width: 400px;
-            width: 100%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .login-logo {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-
-        .login-logo-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 20px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
-
-        .app-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
-
-        .logo-text h1 {
-            font-size: 24px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .logo-text p {
-            font-size: 14px;
-            color: var(--text-light);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .language-selector {
-            padding: 8px 16px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .language-selector:hover {
-            border-color: var(--primary);
-        }
-
-        .nav-tabs {
-            display: flex;
-            gap: 12px;
-            background: var(--light);
-            padding: 8px;
-            border-radius: 12px;
-            flex-wrap: wrap;
-        }
-
-        .nav-tab {
-            padding: 12px 24px;
-            border: none;
-            background: transparent;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text);
-            transition: all 0.3s;
-        }
-
-        .nav-tab:hover {
-            background: white;
-        }
-
-        .nav-tab.active {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-        }
-
-        .content-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 24px;
-            margin-bottom: 24px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .card h2 {
-            font-size: 20px;
-            margin-bottom: 16px;
-            color: var(--dark);
-        }
-
-        .card h3 {
-            font-size: 18px;
-            margin-bottom: 12px;
-            color: var(--dark);
-        }
-
-        .timer-display {
-            font-size: 64px;
-            font-weight: bold;
-            text-align: center;
-            margin: 24px 0;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .timer-controls {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-        }
-
-        .btn-secondary {
-            background: var(--light);
-            color: var(--text);
-        }
-
-        .btn-secondary:hover {
-            background: var(--border);
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .task-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .task-item {
-            padding: 16px;
-            background: var(--light);
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .task-item:hover {
-            background: var(--border);
-        }
-
-        .task-info h4 {
-            font-size: 16px;
-            color: var(--dark);
-            margin-bottom: 4px;
-        }
-
-        .task-info p {
-            font-size: 14px;
-            color: var(--text-light);
-        }
-
-        .task-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .priority-badge {
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .priority-high {
-            background: #fee2e2;
-            color: var(--danger);
-        }
-
-        .priority-medium {
-            background: #fef3c7;
-            color: var(--warning);
-        }
-
-        .priority-low {
-            background: #dbeafe;
-            color: #3b82f6;
-        }
-
-        .flashcard-container {
-            perspective: 1000px;
-            height: 300px;
-            cursor: pointer;
-            margin: 24px 0;
-        }
-
-        .flashcard {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-
-        .flashcard.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .flashcard-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            padding: 24px;
-            font-size: 20px;
-            text-align: center;
-        }
-
-        .flashcard-front {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .flashcard-back {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            transform: rotateY(180deg);
-        }
-
-        .input-group {
-            margin-bottom: 16px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .input-group input,
-        .input-group textarea,
-        .input-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: inherit;
-        }
-
-        .input-group input:focus,
-        .input-group textarea:focus,
-        .input-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .quiz-option {
-            padding: 16px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .quiz-option:hover {
-            border-color: var(--primary);
-            background: var(--light);
-        }
-
-        .quiz-option.selected {
-            border-color: var(--primary);
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-        }
-
-        .quiz-option.correct {
-            border-color: var(--success);
-            background: var(--success);
-            color: white;
-        }
-
-        .quiz-option.incorrect {
-            border-color: var(--danger);
-            background: var(--danger);
-            color: white;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 12px;
-            background: var(--light);
-            border-radius: 6px;
-            overflow: hidden;
-            margin: 16px 0;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            transition: width 0.3s;
-        }
-
-        .ai-chat {
-            max-height: 400px;
-            overflow-y: auto;
-            margin-bottom: 16px;
-            padding: 16px;
-            background: var(--light);
-            border-radius: 8px;
-        }
-
-        .message {
-            margin-bottom: 12px;
-            padding: 12px;
-            border-radius: 8px;
-            max-width: 80%;
-        }
-
-        .message.user {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            margin-left: auto;
-        }
-
-        .message.ai {
-            background: white;
-            border: 2px solid var(--border);
-        }
-
-        .message img {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-top: 8px;
-        }
-
-        .upload-area {
-            border: 2px dashed var(--border);
-            border-radius: 8px;
-            padding: 24px;
-            text-align: center;
-            margin-bottom: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .upload-area:hover {
-            border-color: var(--primary);
-            background: var(--light);
-        }
-
-        .upload-area.dragover {
-            border-color: var(--primary);
-            background: var(--light);
-        }
-
-        .uploaded-preview {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 8px;
-            margin-top: 12px;
-        }
-
-        .ad-container {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            min-height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        @media (max-width: 768px) {
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .header {
-                flex-direction: column;
-                gap: 16px;
-            }
-
-            .nav-tabs {
-                width: 100%;
-                flex-wrap: wrap;
-            }
-
-            .timer-display {
-                font-size: 48px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyBoost AI</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#6366f1;--secondary:#8b5cf6;--success:#10b981;
+  --warning:#f59e0b;--danger:#ef4444;--dark:#1f2937;
+  --light:#f9fafb;--border:#e5e7eb;--text:#374151;--muted:#6b7280;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:linear-gradient(135deg,#667eea,#764ba2);min-height:100vh;color:var(--text)}
+.hidden{display:none!important}
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{background:#fff;border-radius:16px;padding:40px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.login-logo{text-align:center;margin-bottom:28px}
+.logo-icon-big{width:72px;height:72px;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:18px;display:inline-flex;align-items:center;justify-content:center;font-size:40px;margin-bottom:12px}
+.login-title{font-size:26px;font-weight:700;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.login-sub{color:var(--muted);font-size:14px}
+.warn-box{background:#fef3c7;border:1px solid #f59e0b;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;margin-bottom:16px}
+.field{margin-bottom:14px}
+.field label{display:block;margin-bottom:6px;font-weight:600;font-size:14px;color:var(--dark)}
+.field input,.field select{width:100%;padding:11px;border:2px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;transition:border-color .2s}
+.field input:focus,.field select:focus{outline:none;border-color:var(--primary)}
+.err-box{background:#fee2e2;color:var(--danger);border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px}
+.lang-row{text-align:right;margin-bottom:14px}
+.lang-sel{padding:7px 12px;border:2px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
+#app-screen{max-width:1400px;margin:0 auto;padding:20px}
+.header{background:#fff;border-radius:16px;padding:20px 24px;margin-bottom:20px;box-shadow:0 4px 6px rgba(0,0,0,.1);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+.logo-row{display:flex;align-items:center;gap:12px}
+.logo-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.logo-name{font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo-tag{font-size:13px;color:var(--muted)}
+.user-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.nav-bar{background:var(--light);border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.nav-btn{padding:10px 20px;border:none;background:transparent;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;color:var(--text);transition:all .2s}
+.nav-btn:hover{background:#fff}
+.nav-btn.active{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff}
+.card{background:#fff;border-radius:16px;padding:24px;box-shadow:0 4px 6px rgba(0,0,0,.08);margin-bottom:20px}
+.card h2{font-size:19px;margin-bottom:16px;color:var(--dark)}
+.card h3{font-size:16px;margin-bottom:12px;color:var(--dark)}
+.btn{padding:10px 20px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .2s}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff}
+.btn-primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 12px rgba(99,102,241,.4)}
+.btn-sm{padding:7px 14px;font-size:13px}
+.btn-ghost{background:var(--light);color:var(--text)}
+.btn-ghost:hover{background:var(--border)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-success{background:var(--success);color:#fff}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:20px}
+.stat-card{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;padding:18px;border-radius:12px;text-align:center}
+.stat-val{font-size:30px;font-weight:700;margin-bottom:4px}
+.stat-lbl{font-size:13px;opacity:.9}
+.prog-bar{height:12px;background:var(--light);border-radius:6px;overflow:hidden;margin:12px 0}
+.prog-fill{height:100%;background:linear-gradient(135deg,var(--primary),var(--secondary));transition:width .4s}
+.timer-big{font-size:72px;font-weight:700;text-align:center;margin:20px 0;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.timer-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.task-form{margin-bottom:20px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.task-form input,.task-form select{padding:10px;border:2px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit}
+.task-form input:focus,.task-form select:focus{outline:none;border-color:var(--primary)}
+.task-form-btn{grid-column:1/-1}
+.task-list{display:flex;flex-direction:column;gap:10px}
+.task-item{padding:14px;background:var(--light);border-radius:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.task-name{font-weight:600;font-size:15px;color:var(--dark)}
+.task-meta{font-size:13px;color:var(--muted)}
+.task-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.badge-high{background:#fee2e2;color:var(--danger)}
+.badge-medium{background:#fef3c7;color:var(--warning)}
+.badge-low{background:#dbeafe;color:#3b82f6}
+.fc-wrap{perspective:1000px;height:260px;cursor:pointer;margin:20px 0}
+.fc-inner{width:100%;height:100%;position:relative;transition:transform .55s;transform-style:preserve-3d}
+.fc-inner.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;border-radius:12px;padding:24px;font-size:18px;text-align:center;flex-direction:column;gap:8px}
+.fc-label{font-size:12px;opacity:.75;text-transform:uppercase;letter-spacing:.05em}
+.fc-front{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
+.fc-back{background:linear-gradient(135deg,#f093fb,#f5576c);color:#fff;transform:rotateY(180deg)}
+.fc-controls{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.q-option{padding:14px;border:2px solid var(--border);border-radius:8px;margin-bottom:10px;cursor:pointer;transition:all .2s;font-size:15px}
+.q-option:hover{border-color:var(--primary);background:var(--light)}
+.q-option.sel{border-color:var(--primary);background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff}
+.q-option.correct{border-color:var(--success);background:var(--success);color:#fff}
+.q-option.wrong{border-color:var(--danger);background:var(--danger);color:#fff}
+.gemini-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#4285f4;background:#e8f0fe;padding:3px 9px;border-radius:20px}
+.chat-box{max-height:380px;overflow-y:auto;padding:14px;background:var(--light);border-radius:10px;margin-bottom:14px;display:flex;flex-direction:column;gap:8px}
+.msg{padding:11px 15px;border-radius:12px;max-width:85%;font-size:14px;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.msg.user{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;margin-left:auto;border-bottom-right-radius:3px}
+.msg.ai{background:#fff;border:2px solid var(--border);border-bottom-left-radius:3px}
+.msg.loading{background:#fff;border:2px solid var(--border);color:var(--muted);font-style:italic}
+.msg img{max-width:100%;border-radius:8px;margin-top:8px;display:block}
+.chat-input-row{display:flex;gap:10px}
+.chat-input{flex:1;padding:11px;border:2px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit}
+.chat-input:focus{outline:none;border-color:var(--primary)}
+.upload-zone{border:2px dashed var(--border);border-radius:8px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:14px}
+.upload-zone:hover,.upload-zone.over{border-color:var(--primary);background:var(--light)}
+.upload-zone .uz-icon{font-size:28px;margin-bottom:6px}
+.upload-zone p{font-size:13px;color:var(--muted)}
+.upload-preview{max-height:110px;border-radius:8px}
+@media(max-width:600px){
+  .task-form{grid-template-columns:1fr}
+  .timer-big{font-size:52px}
+  .header{flex-direction:column}
+}
+</style>
 </head>
 <body>
-    <div id="root"></div>
-
-    <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
-
-        // Translations
-        const translations = {
-            en: {
-                appName: "StudyBoost AI",
-                tagline: "Your Smart Study Companion",
-                username: "Username",
-                password: "Password",
-                login: "Login",
-                signup: "Sign Up",
-                alreadyAccount: "Already have an account? Login",
-                noAccount: "Don't have an account? Sign Up",
-                welcome: "Welcome",
-                logout: "Logout",
-                dashboard: "Dashboard",
-                focusTimer: "Focus Timer",
-                tasks: "Tasks",
-                flashcards: "Flashcards",
-                quiz: "Quiz",
-                aiHelper: "AI Helper",
-                minutesStudied: "Minutes Studied",
-                tasksCompleted: "Tasks Completed",
-                dailyGoal: "Daily Goal",
-                dailyProgress: "Daily Progress",
-                goal: "Goal",
-                goalCompleted: "Goal completed!",
-                minutesRemaining: "minutes remaining",
-                sessionsToday: "Sessions today",
-                start: "Start",
-                pause: "Pause",
-                reset: "Reset",
-                studyTasks: "Study Tasks",
-                taskTitle: "Task title",
-                subject: "Subject",
-                lowPriority: "Low Priority",
-                mediumPriority: "Medium Priority",
-                highPriority: "High Priority",
-                addTask: "Add Task",
-                done: "Done",
-                undo: "Undo",
-                delete: "Delete",
-                question: "Question",
-                answer: "Answer",
-                previous: "Previous",
-                next: "Next",
-                flipCard: "Flip Card",
-                createFlashcard: "Create New Flashcard",
-                enterQuestion: "Enter question",
-                enterAnswer: "Enter answer",
-                addFlashcard: "Add Flashcard",
-                quizMode: "Quiz Mode",
-                score: "Score",
-                submitAnswer: "Submit Answer",
-                nextQuestion: "Next Question",
-                finishQuiz: "Finish Quiz",
-                quizComplete: "Quiz complete! Your score",
-                aiStudyHelper: "AI Study Helper",
-                aiGreeting: "Hello! I'm your AI study assistant. Ask me anything, paste your notes, upload images, or share links for summarization!",
-                askQuestion: "Ask a question, paste notes, or share a link...",
-                send: "Send",
-                uploadImage: "Upload Image",
-                dragDrop: "Drag & drop an image here or click to upload",
-                pasteLink: "Paste a link to summarize",
-                analyzing: "Analyzing your content...",
-                fillAllFields: "Please fill in all fields",
-                usernameExists: "Username already exists",
-                invalidCredentials: "Invalid username or password"
-            },
-            nl: {
-                appName: "StudyBoost AI",
-                tagline: "Jouw Slimme Studiepartner",
-                username: "Gebruikersnaam",
-                password: "Wachtwoord",
-                login: "Inloggen",
-                signup: "Registreren",
-                alreadyAccount: "Heb je al een account? Inloggen",
-                noAccount: "Heb je geen account? Registreren",
-                welcome: "Welkom",
-                logout: "Uitloggen",
-                dashboard: "Dashboard",
-                focusTimer: "Focus Timer",
-                tasks: "Taken",
-                flashcards: "Flashcards",
-                quiz: "Quiz",
-                aiHelper: "AI Assistent",
-                minutesStudied: "Minuten Gestudeerd",
-                tasksCompleted: "Taken Voltooid",
-                dailyGoal: "Dagelijks Doel",
-                dailyProgress: "Dagelijkse Voortgang",
-                goal: "Doel",
-                goalCompleted: "Doel behaald!",
-                minutesRemaining: "minuten resterend",
-                sessionsToday: "Sessies vandaag",
-                start: "Start",
-                pause: "Pauzeer",
-                reset: "Reset",
-                studyTasks: "Studietaken",
-                taskTitle: "Taaknaam",
-                subject: "Onderwerp",
-                lowPriority: "Lage Prioriteit",
-                mediumPriority: "Middel Prioriteit",
-                highPriority: "Hoge Prioriteit",
-                addTask: "Taak Toevoegen",
-                done: "Klaar",
-                undo: "Ongedaan",
-                delete: "Verwijder",
-                question: "Vraag",
-                answer: "Antwoord",
-                previous: "Vorige",
-                next: "Volgende",
-                flipCard: "Kaart Omdraaien",
-                createFlashcard: "Nieuwe Flashcard Maken",
-                enterQuestion: "Voer vraag in",
-                enterAnswer: "Voer antwoord in",
-                addFlashcard: "Flashcard Toevoegen",
-                quizMode: "Quiz Modus",
-                score: "Score",
-                submitAnswer: "Antwoord Verzenden",
-                nextQuestion: "Volgende Vraag",
-                finishQuiz: "Quiz Voltooien",
-                quizComplete: "Quiz voltooid! Jouw score",
-                aiStudyHelper: "AI Studie Assistent",
-                aiGreeting: "Hallo! Ik ben je AI studie-assistent. Stel me vragen, plak je notities, upload afbeeldingen of deel links voor samenvatting!",
-                askQuestion: "Stel een vraag, plak notities of deel een link...",
-                send: "Verzenden",
-                uploadImage: "Afbeelding Uploaden",
-                dragDrop: "Sleep een afbeelding hier of klik om te uploaden",
-                pasteLink: "Plak een link om samen te vatten",
-                analyzing: "Inhoud analyseren...",
-                fillAllFields: "Vul alle velden in",
-                usernameExists: "Gebruikersnaam bestaat al",
-                invalidCredentials: "Ongeldige gebruikersnaam of wachtwoord"
-            },
-            fr: {
-                appName: "StudyBoost AI",
-                tagline: "Votre Compagnon d'Étude Intelligent",
-                username: "Nom d'utilisateur",
-                password: "Mot de passe",
-                login: "Connexion",
-                signup: "S'inscrire",
-                alreadyAccount: "Vous avez déjà un compte? Connexion",
-                noAccount: "Vous n'avez pas de compte? S'inscrire",
-                welcome: "Bienvenue",
-                logout: "Déconnexion",
-                dashboard: "Tableau de Bord",
-                focusTimer: "Minuteur Focus",
-                tasks: "Tâches",
-                flashcards: "Cartes Mémoire",
-                quiz: "Quiz",
-                aiHelper: "Assistant IA",
-                minutesStudied: "Minutes Étudiées",
-                tasksCompleted: "Tâches Terminées",
-                dailyGoal: "Objectif Quotidien",
-                dailyProgress: "Progrès Quotidien",
-                goal: "Objectif",
-                goalCompleted: "Objectif atteint!",
-                minutesRemaining: "minutes restantes",
-                sessionsToday: "Sessions aujourd'hui",
-                start: "Démarrer",
-                pause: "Pause",
-                reset: "Réinitialiser",
-                studyTasks: "Tâches d'Étude",
-                taskTitle: "Titre de la tâche",
-                subject: "Sujet",
-                lowPriority: "Priorité Basse",
-                mediumPriority: "Priorité Moyenne",
-                highPriority: "Priorité Haute",
-                addTask: "Ajouter Tâche",
-                done: "Terminé",
-                undo: "Annuler",
-                delete: "Supprimer",
-                question: "Question",
-                answer: "Réponse",
-                previous: "Précédent",
-                next: "Suivant",
-                flipCard: "Retourner Carte",
-                createFlashcard: "Créer Nouvelle Carte",
-                enterQuestion: "Entrez la question",
-                enterAnswer: "Entrez la réponse",
-                addFlashcard: "Ajouter Carte",
-                quizMode: "Mode Quiz",
-                score: "Score",
-                submitAnswer: "Soumettre Réponse",
-                nextQuestion: "Question Suivante",
-                finishQuiz: "Terminer Quiz",
-                quizComplete: "Quiz terminé! Votre score",
-                aiStudyHelper: "Assistant IA d'Étude",
-                aiGreeting: "Bonjour! Je suis votre assistant d'étude IA. Posez-moi des questions, collez vos notes, téléchargez des images ou partagez des liens pour résumé!",
-                askQuestion: "Posez une question, collez des notes ou partagez un lien...",
-                send: "Envoyer",
-                uploadImage: "Télécharger Image",
-                dragDrop: "Glissez-déposez une image ici ou cliquez pour télécharger",
-                pasteLink: "Collez un lien à résumer",
-                analyzing: "Analyse de votre contenu...",
-                fillAllFields: "Veuillez remplir tous les champs",
-                usernameExists: "Le nom d'utilisateur existe déjà",
-                invalidCredentials: "Nom d'utilisateur ou mot de passe invalide"
-            }
-        };
-
-        // Login Component
-        function Login({ onLogin, lang, onLangChange }) {
-            const [username, setUsername] = useState('');
-            const [password, setPassword] = useState('');
-            const [isSignup, setIsSignup] = useState(false);
-            const [error, setError] = useState('');
-            const t = translations[lang];
-
-            const handleSubmit = (e) => {
-                e.preventDefault();
-                setError('');
-
-                if (!username || !password) {
-                    setError(t.fillAllFields);
-                    return;
-                }
-
-                if (isSignup) {
-                    const users = JSON.parse(localStorage.getItem('studyboost_users') || '{}');
-                    if (users[username]) {
-                        setError(t.usernameExists);
-                        return;
-                    }
-                    users[username] = password;
-                    localStorage.setItem('studyboost_users', JSON.stringify(users));
-                    localStorage.setItem('studyboost_current_user', username);
-                    onLogin(username);
-                } else {
-                    const users = JSON.parse(localStorage.getItem('studyboost_users') || '{}');
-                    if (users[username] === password) {
-                        localStorage.setItem('studyboost_current_user', username);
-                        onLogin(username);
-                    } else {
-                        setError(t.invalidCredentials);
-                    }
-                }
-            };
-
-            return (
-                <div className="login-container">
-                    <div className="login-card">
-                        <div style={{textAlign: 'right', marginBottom: '16px'}}>
-                            <select className="language-selector" value={lang} onChange={(e) => onLangChange(e.target.value)}>
-                                <option value="en">🇬🇧 English</option>
-                                <option value="nl">🇳🇱 Nederlands</option>
-                                <option value="fr">🇫🇷 Français</option>
-                            </select>
-                        </div>
-                        <div className="login-logo">
-                            <div className="login-logo-icon">🎓</div>
-                            <h1 style={{fontSize: '28px', marginBottom: '8px', background: 'linear-gradient(135deg, var(--primary), var(--secondary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>{t.appName}</h1>
-                            <p style={{color: 'var(--text-light)'}}>{t.tagline}</p>
-                        </div>
-
-                        <form onSubmit={handleSubmit}>
-                            <div className="input-group">
-                                <label>{t.username}</label>
-                                <input
-                                    type="text"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    placeholder={t.username}
-                                />
-                            </div>
-                            <div className="input-group">
-                                <label>{t.password}</label>
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder={t.password}
-                                />
-                            </div>
-
-                            {error && (
-                                <div style={{padding: '12px', background: '#fee2e2', color: 'var(--danger)', borderRadius: '8px', marginBottom: '16px', fontSize: '14px'}}>
-                                    {error}
-                                </div>
-                            )}
-
-                            <button type="submit" className="btn btn-primary" style={{width: '100%', justifyContent: 'center', marginBottom: '12px'}}>
-                                {isSignup ? t.signup : t.login}
-                            </button>
-
-                            <button
-                                type="button"
-                                className="btn btn-secondary"
-                                style={{width: '100%', justifyContent: 'center'}}
-                                onClick={() => setIsSignup(!isSignup)}
-                            >
-                                {isSignup ? t.alreadyAccount : t.noAccount}
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            );
-        }
-
-        // Dashboard Component
-        function Dashboard({ username, lang }) {
-            const t = translations[lang];
-            const [studyTime, setStudyTime] = useState(() => {
-                const saved = localStorage.getItem(`studyboost_${username}_studyTime`);
-                return saved ? parseInt(saved) : 0;
-            });
-            const [tasksCompleted, setTasksCompleted] = useState(() => {
-                const saved = localStorage.getItem(`studyboost_${username}_tasksCompleted`);
-                return saved ? parseInt(saved) : 0;
-            });
-            const [dailyGoal, setDailyGoal] = useState(120);
-
-            return (
-                <div>
-                    <div className="stats-grid">
-                        <div className="stat-card">
-                            <div className="stat-value">{studyTime}</div>
-                            <div className="stat-label">{t.minutesStudied}</div>
-                        </div>
-                        <div className="stat-card">
-                            <div className="stat-value">{tasksCompleted}</div>
-                            <div className="stat-label">{t.tasksCompleted}</div>
-                        </div>
-                        <div className="stat-card">
-                            <div className="stat-value">{Math.round((studyTime / dailyGoal) * 100)}%</div>
-                            <div className="stat-label">{t.dailyGoal}</div>
-                        </div>
-                    </div>
-
-                    <div className="card">
-                        <h2>{t.dailyProgress}</h2>
-                        <p style={{marginBottom: '8px'}}>{t.goal}: {dailyGoal} {t.minutesStudied.toLowerCase()}</p>
-                        <div className="progress-bar">
-                            <div className="progress-fill" style={{width: `${Math.min((studyTime / dailyGoal) * 100, 100)}%`}}></div>
-                        </div>
-                        <p style={{color: 'var(--text-light)', fontSize: '14px'}}>
-                            {studyTime >= dailyGoal ? t.goalCompleted : `${dailyGoal - studyTime} ${t.minutesRemaining}`}
-                        </p>
-                    </div>
-                </div>
-            );
-        }
-
-        // Pomodoro Timer Component
-        function PomodoroTimer({ username, lang }) {
-            const t = translations[lang];
-            const [minutes, setMinutes] = useState(25);
-            const [seconds, setSeconds] = useState(0);
-            const [isActive, setIsActive] = useState(false);
-            const [sessions, setSessions] = useState(() => {
-                const saved = localStorage.getItem(`studyboost_${username}_sessions`);
-                return saved ? parseInt(saved) : 0;
-            });
-            const intervalRef = useRef(null);
-
-            useEffect(() => {
-                if (isActive) {
-                    intervalRef.current = setInterval(() => {
-                        if (seconds === 0) {
-                            if (minutes === 0) {
-                                setIsActive(false);
-                                const newSessions = sessions + 1;
-                                setSessions(newSessions);
-                                localStorage.setItem(`studyboost_${username}_sessions`, newSessions.toString());
-
-                                const currentStudyTime = parseInt(localStorage.getItem(`studyboost_${username}_studyTime`) || '0');
-                                localStorage.setItem(`studyboost_${username}_studyTime`, (currentStudyTime + 25).toString());
-
-                                alert('Pomodoro session complete! Take a break.');
-                                setMinutes(25);
-                                setSeconds(0);
-                            } else {
-                                setMinutes(m => m - 1);
-                                setSeconds(59);
-                            }
-                        } else {
-                            setSeconds(s => s - 1);
-                        }
-                    }, 1000);
-                } else {
-                    clearInterval(intervalRef.current);
-                }
-
-                return () => clearInterval(intervalRef.current);
-            }, [isActive, minutes, seconds, sessions, username]);
-
-            const toggle = () => setIsActive(!isActive);
-            const reset = () => {
-                setIsActive(false);
-                setMinutes(25);
-                setSeconds(0);
-            };
-
-            return (
-                <div className="card">
-                    <h2>{t.focusTimer} (Pomodoro)</h2>
-                    <p style={{color: 'var(--text-light)', marginBottom: '16px'}}>{t.sessionsToday}: {sessions}</p>
-                    <div className="timer-display">
-                        {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
-                    </div>
-                    <div className="timer-controls">
-                        <button className={isActive ? "btn btn-danger" : "btn btn-primary"} onClick={toggle}>
-                            {isActive ? t.pause : t.start}
-                        </button>
-                        <button className="btn btn-secondary" onClick={reset}>
-                            {t.reset}
-                        </button>
-                    </div>
-                </div>
-            );
-        }
-
-        // Task Manager Component
-        function TaskManager({ username, lang }) {
-            const t = translations[lang];
-            const [tasks, setTasks] = useState(() => {
-                const saved = localStorage.getItem(`studyboost_${username}_tasks`);
-                return saved ? JSON.parse(saved) : [];
-            });
-            const [newTask, setNewTask] = useState({ title: '', subject: '', duration: 30, priority: 'medium' });
-
-            useEffect(() => {
-                localStorage.setItem(`studyboost_${username}_tasks`, JSON.stringify(tasks));
-            }, [tasks, username]);
-
-            const addTask = () => {
-                if (newTask.title && newTask.subject) {
-                    setTasks([...tasks, { ...newTask, id: Date.now(), completed: false }]);
-                    setNewTask({ title: '', subject: '', duration: 30, priority: 'medium' });
-                }
-            };
-
-            const toggleTask = (id) => {
-                setTasks(tasks.map(task => {
-                    if (task.id === id) {
-                        const newCompleted = !task.completed;
-                        if (newCompleted) {
-                            const currentTasksCompleted = parseInt(localStorage.getItem(`studyboost_${username}_tasksCompleted`) || '0');
-                            localStorage.setItem(`studyboost_${username}_tasksCompleted`, (currentTasksCompleted + 1).toString());
-                        } else {
-                            const currentTasksCompleted = parseInt(localStorage.getItem(`studyboost_${username}_tasksCompleted`) || '0');
-                            localStorage.setItem(`studyboost_${username}_tasksCompleted`, Math.max(0, currentTasksCompleted - 1).toString());
-                        }
-                        return { ...task, completed: newCompleted };
-                    }
-                    return task;
-                }));
-            };
-
-            const deleteTask = (id) => {
-                setTasks(tasks.filter(task => task.id !== id));
-            };
-
-            return (
-                <div className="card">
-                    <h2>{t.studyTasks}</h2>
-
-                    <div style={{marginBottom: '24px'}}>
-                        <div className="input-group">
-                            <input
-                                type="text"
-                                placeholder={t.taskTitle}
-                                value={newTask.title}
-                                onChange={(e) => setNewTask({...newTask, title: e.target.value})}
-                            />
-                        </div>
-                        <div className="input-group">
-                            <input
-                                type="text"
-                                placeholder={t.subject}
-                                value={newTask.subject}
-                                onChange={(e) => setNewTask({...newTask, subject: e.target.value})}
-                            />
-                        </div>
-                        <div className="input-group">
-                            <select value={newTask.priority} onChange={(e) => setNewTask({...newTask, priority: e.target.value})}>
-                                <option value="low">{t.lowPriority}</option>
-                                <option value="medium">{t.mediumPriority}</option>
-                                <option value="high">{t.highPriority}</option>
-                            </select>
-                        </div>
-                        <button className="btn btn-primary" onClick={addTask}>{t.addTask}</button>
-                    </div>
-
-                    <div className="task-list">
-                        {tasks.map(task => (
-                            <div key={task.id} className="task-item" style={{opacity: task.completed ? 0.6 : 1}}>
-                                <div className="task-info">
-                                    <h4 style={{textDecoration: task.completed ? 'line-through' : 'none'}}>
-                                        {task.title}
-                                    </h4>
-                                    <p>{task.subject} • {task.duration} min</p>
-                                </div>
-                                <div className="task-actions">
-                                    <span className={`priority-badge priority-${task.priority}`}>
-                                        {task.priority}
-                                    </span>
-                                    <button
-                                        className={task.completed ? "btn btn-secondary" : "btn btn-success"}
-                                        onClick={() => toggleTask(task.id)}
-                                    >
-                                        {task.completed ? t.undo : t.done}
-                                    </button>
-                                    <button className="btn btn-danger" onClick={() => deleteTask(task.id)}>
-                                        {t.delete}
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            );
-        }
-
-        // Flashcard Component
-        function Flashcards({ username, lang }) {
-            const t = translations[lang];
-            const [cards, setCards] = useState(() => {
-                const saved = localStorage.getItem(`studyboost_${username}_flashcards`);
-                return saved ? JSON.parse(saved) : [];
-            });
-            const [currentIndex, setCurrentIndex] = useState(0);
-            const [isFlipped, setIsFlipped] = useState(false);
-            const [newCard, setNewCard] = useState({ question: '', answer: '' });
-
-            useEffect(() => {
-                localStorage.setItem(`studyboost_${username}_flashcards`, JSON.stringify(cards));
-            }, [cards, username]);
-
-            const nextCard = () => {
-                setIsFlipped(false);
-                setCurrentIndex((currentIndex + 1) % cards.length);
-            };
-
-            const prevCard = () => {
-                setIsFlipped(false);
-                setCurrentIndex((currentIndex - 1 + cards.length) % cards.length);
-            };
-
-            const addCard = () => {
-                if (newCard.question && newCard.answer) {
-                    setCards([...cards, { ...newCard, id: Date.now() }]);
-                    setNewCard({ question: '', answer: '' });
-                }
-            };
-
-            return (
-                <div>
-                    <div className="card">
-                        <h2>{t.flashcards} {cards.length > 0 && `(${currentIndex + 1} / ${cards.length})`}</h2>
-
-                        {cards.length > 0 && (
-                            <>
-                                <div className="flashcard-container" onClick={() => setIsFlipped(!isFlipped)}>
-                                    <div className={`flashcard ${isFlipped ? 'flipped' : ''}`}>
-                                        <div className="flashcard-face flashcard-front">
-                                            <div>
-                                                <p style={{fontSize: '14px', opacity: 0.8, marginBottom: '12px'}}>{t.question}</p>
-                                                <p>{cards[currentIndex]?.question}</p>
-                                            </div>
-                                        </div>
-                                        <div className="flashcard-face flashcard-back">
-                                            <div>
-                                                <p style={{fontSize: '14px', opacity: 0.8, marginBottom: '12px'}}>{t.answer}</p>
-                                                <p>{cards[currentIndex]?.answer}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div style={{display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '24px', flexWrap: 'wrap'}}>
-                                    <button className="btn btn-secondary" onClick={prevCard}>{t.previous}</button>
-                                    <button className="btn btn-primary" onClick={() => setIsFlipped(!isFlipped)}>
-                                        {t.flipCard}
-                                    </button>
-                                    <button className="btn btn-secondary" onClick={nextCard}>{t.next}</button>
-                                </div>
-                            </>
-                        )}
-                    </div>
-
-                    <div className="card" style={{marginTop: '24px'}}>
-                        <h3>{t.createFlashcard}</h3>
-                        <div className="input-group">
-                            <label>{t.question}</label>
-                            <input
-                                type="text"
-                                value={newCard.question}
-                                onChange={(e) => setNewCard({...newCard, question: e.target.value})}
-                                placeholder={t.enterQuestion}
-                            />
-                        </div>
-                        <div className="input-group">
-                            <label>{t.answer}</label>
-                            <textarea
-                                value={newCard.answer}
-                                onChange={(e) => setNewCard({...newCard, answer: e.target.value})}
-                                placeholder={t.enterAnswer}
-                                rows="4"
-                            />
-                        </div>
-                        <button className="btn btn-primary" onClick={addCard}>{t.addFlashcard}</button>
-                    </div>
-                </div>
-            );
-        }
-
-        // Quiz Component
-        function Quiz({ lang }) {
-            const t = translations[lang];
-            const [questions] = useState([
-                {
-                    id: 1,
-                    question: 'What is the chemical formula for water?',
-                    options: ['H2O', 'CO2', 'O2', 'H2O2'],
-                    correct: 0
-                },
-                {
-                    id: 2,
-                    question: 'Who painted the Mona Lisa?',
-                    options: ['Michelangelo', 'Leonardo da Vinci', 'Raphael', 'Donatello'],
-                    correct: 1
-                },
-                {
-                    id: 3,
-                    question: 'What is the largest planet in our solar system?',
-                    options: ['Earth', 'Mars', 'Jupiter', 'Saturn'],
-                    correct: 2
-                }
-            ]);
-            const [currentQ, setCurrentQ] = useState(0);
-            const [selected, setSelected] = useState(null);
-            const [showAnswer, setShowAnswer] = useState(false);
-            const [score, setScore] = useState(0);
-
-            const handleAnswer = () => {
-                if (selected === questions[currentQ].correct) {
-                    setScore(score + 1);
-                }
-                setShowAnswer(true);
-            };
-
-            const nextQuestion = () => {
-                if (currentQ < questions.length - 1) {
-                    setCurrentQ(currentQ + 1);
-                    setSelected(null);
-                    setShowAnswer(false);
-                } else {
-                    alert(`${t.quizComplete}: ${score + (selected === questions[currentQ].correct ? 1 : 0)}/${questions.length}`);
-                }
-            };
-
-            return (
-                <div className="card">
-                    <h2>{t.quizMode}</h2>
-                    <p style={{color: 'var(--text-light)', marginBottom: '24px'}}>
-                        {t.question} {currentQ + 1} / {questions.length} | {t.score}: {score}
-                    </p>
-
-                    <h3 style={{marginBottom: '24px'}}>{questions[currentQ].question}</h3>
-
-                    <div>
-                        {questions[currentQ].options.map((option, index) => (
-                            <div
-                                key={index}
-                                className={`quiz-option ${selected === index ? 'selected' : ''} ${
-                                    showAnswer && index === questions[currentQ].correct ? 'correct' : ''
-                                } ${showAnswer && selected === index && index !== questions[currentQ].correct ? 'incorrect' : ''}`}
-                                onClick={() => !showAnswer && setSelected(index)}
-                            >
-                                {option}
-                            </div>
-                        ))}
-                    </div>
-
-                    <div style={{marginTop: '24px', display: 'flex', gap: '12px'}}>
-                        {!showAnswer ? (
-                            <button
-                                className="btn btn-primary"
-                                onClick={handleAnswer}
-                                disabled={selected === null}
-                            >
-                                {t.submitAnswer}
-                            </button>
-                        ) : (
-                            <button className="btn btn-primary" onClick={nextQuestion}>
-                                {currentQ < questions.length - 1 ? t.nextQuestion : t.finishQuiz}
-                            </button>
-                        )}
-                    </div>
-                </div>
-            );
-        }
-
-        // AI Helper Component
-        function AIHelper({ lang }) {
-            const t = translations[lang];
-            const [messages, setMessages] = useState([
-                { type: 'ai', text: t.aiGreeting }
-            ]);
-            const [input, setInput] = useState('');
-            const [uploadedImage, setUploadedImage] = useState(null);
-            const fileInputRef = useRef(null);
-
-            const handleImageUpload = (e) => {
-                const file = e.target.files[0];
-                if (file && file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        const imageData = event.target.result;
-                        setUploadedImage(imageData);
-
-                        // Add to messages
-                        setMessages(prev => [...prev, {
-                            type: 'user',
-                            text: t.uploadImage,
-                            image: imageData
-                        }]);
-
-                        // Simulate AI analysis
-                        setTimeout(() => {
-                            setMessages(prev => [...prev, {
-                                type: 'ai',
-                                text: 'I can see the image you uploaded. This appears to be study material. I can help you understand the content, create flashcards from it, or summarize the key points. What would you like me to do?'
-                            }]);
-                        }, 1500);
-
-                        setUploadedImage(null);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            };
-
-            const handleDragOver = (e) => {
-                e.preventDefault();
-                e.currentTarget.classList.add('dragover');
-            };
-
-            const handleDragLeave = (e) => {
-                e.preventDefault();
-                e.currentTarget.classList.remove('dragover');
-            };
-
-            const handleDrop = (e) => {
-                e.preventDefault();
-                e.currentTarget.classList.remove('dragover');
-                const file = e.dataTransfer.files[0];
-                if (file && file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        const imageData = event.target.result;
-                        setMessages(prev => [...prev, {
-                            type: 'user',
-                            text: t.uploadImage,
-                            image: imageData
-                        }]);
-
-                        setTimeout(() => {
-                            setMessages(prev => [...prev, {
-                                type: 'ai',
-                                text: 'I can see the image you uploaded. This appears to be study material. I can help you understand the content, create flashcards from it, or summarize the key points. What would you like me to do?'
-                            }]);
-                        }, 1500);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            };
-
-            const sendMessage = () => {
-                if (input.trim()) {
-                    const userMessage = input.trim();
-                    setMessages([...messages, { type: 'user', text: userMessage }]);
-
-                    // Check if it's a URL
-                    const urlRegex = /(https?:\/\/[^\s]+)/g;
-                    const isUrl = urlRegex.test(userMessage);
-
-                    setTimeout(() => {
-                        let response;
-                        if (isUrl) {
-                            response = `I'm analyzing the link you shared. Based on the content, here's a summary: This appears to be educational material. I can help you create study notes, flashcards, or quiz questions from this content. Would you like me to proceed?`;
-                        } else {
-                            const responses = [
-                                'Great question! Let me help you understand that better.',
-                                'Based on your notes, here are the key points you should focus on...',
-                                'I\'ve analyzed your text. Would you like me to generate flashcards from this?',
-                                'That\'s an interesting topic! Here\'s what you should remember...',
-                                'I can help you summarize this content into digestible study notes.'
-                            ];
-                            response = responses[Math.floor(Math.random() * responses.length)];
-                        }
-
-                        setMessages(prev => [...prev, {
-                            type: 'ai',
-                            text: response
-                        }]);
-                    }, 1000);
-
-                    setInput('');
-                }
-            };
-
-            return (
-                <div>
-                    <div className="card">
-                        <h2>{t.aiStudyHelper}</h2>
-
-                        <div className="upload-area"
-                            onClick={() => fileInputRef.current.click()}
-                            onDragOver={handleDragOver}
-                            onDragLeave={handleDragLeave}
-                            onDrop={handleDrop}
-                        >
-                            <p style={{fontSize: '24px', marginBottom: '8px'}}>📸</p>
-                            <p style={{color: 'var(--text-light)', fontSize: '14px'}}>{t.dragDrop}</p>
-                            <input
-                                ref={fileInputRef}
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageUpload}
-                                style={{display: 'none'}}
-                            />
-                        </div>
-
-                        <div className="ai-chat">
-                            {messages.map((msg, idx) => (
-                                <div key={idx} className={`message ${msg.type}`}>
-                                    {msg.text}
-                                    {msg.image && <img src={msg.image} alt="Uploaded" />}
-                                </div>
-                            ))}
-                        </div>
-
-                        <div style={{display: 'flex', gap: '12px', flexWrap: 'wrap'}}>
-                            <input
-                                type="text"
-                                placeholder={t.askQuestion}
-                                value={input}
-                                onChange={(e) => setInput(e.target.value)}
-                                onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                                style={{flex: 1, padding: '12px', border: '2px solid var(--border)', borderRadius: '8px', minWidth: '200px'}}
-                            />
-                            <button className="btn btn-primary" onClick={sendMessage}>{t.send}</button>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-
-        // Main App Component
-        function App() {
-            const [currentUser, setCurrentUser] = useState(() => {
-                return localStorage.getItem('studyboost_current_user');
-            });
-            const [activeTab, setActiveTab] = useState('dashboard');
-            const [language, setLanguage] = useState(() => {
-                return localStorage.getItem('studyboost_language') || 'en';
-            });
-
-            const t = translations[language];
-
-            const handleLogin = (username) => {
-                setCurrentUser(username);
-            };
-
-            const handleLogout = () => {
-                localStorage.removeItem('studyboost_current_user');
-                setCurrentUser(null);
-            };
-
-            const handleLanguageChange = (lang) => {
-                setLanguage(lang);
-                localStorage.setItem('studyboost_language', lang);
-            };
-
-            if (!currentUser) {
-                return <Login onLogin={handleLogin} lang={language} onLangChange={handleLanguageChange} />;
-            }
-
-            return (
-                <div className="app-container">
-                    <div className="header">
-                        <div className="logo">
-                            <div className="logo-icon">🎓</div>
-                            <div className="logo-text">
-                                <h1>{t.appName}</h1>
-                                <p>{t.tagline}</p>
-                            </div>
-                        </div>
-                        <div className="user-info">
-                            <select className="language-selector" value={language} onChange={(e) => handleLanguageChange(e.target.value)}>
-                                <option value="en">🇬🇧 English</option>
-                                <option value="nl">🇳🇱 Nederlands</option>
-                                <option value="fr">🇫🇷 Français</option>
-                            </select>
-                            <span style={{color: 'var(--text-light)'}}>{t.welcome}, <strong>{currentUser}</strong></span>
-                            <button className="btn btn-secondary" onClick={handleLogout}>{t.logout}</button>
-                        </div>
-                    </div>
-
-                    <div style={{marginBottom: '24px'}}>
-                        <div className="nav-tabs">
-                            <button
-                                className={`nav-tab ${activeTab === 'dashboard' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('dashboard')}
-                            >
-                                {t.dashboard}
-                            </button>
-                            <button
-                                className={`nav-tab ${activeTab === 'timer' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('timer')}
-                            >
-                                {t.focusTimer}
-                            </button>
-                            <button
-                                className={`nav-tab ${activeTab === 'tasks' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('tasks')}
-                            >
-                                {t.tasks}
-                            </button>
-                            <button
-                                className={`nav-tab ${activeTab === 'flashcards' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('flashcards')}
-                            >
-                                {t.flashcards}
-                            </button>
-                            <button
-                                className={`nav-tab ${activeTab === 'quiz' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('quiz')}
-                            >
-                                {t.quiz}
-                            </button>
-                            <button
-                                className={`nav-tab ${activeTab === 'ai' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('ai')}
-                            >
-                                {t.aiHelper}
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Google AdSense Ad Unit */}
-                    <div className="ad-container">
-                        <ins className="adsbygoogle"
-                             style={{display: 'block'}}
-                             data-ad-client="ca-pub-0000000000000000"
-                             data-ad-slot="0000000000"
-                             data-ad-format="auto"
-                             data-full-width-responsive="true"></ins>
-                    </div>
-
-                    <div>
-                        {activeTab === 'dashboard' && <Dashboard username={currentUser} lang={language} />}
-                        {activeTab === 'timer' && <PomodoroTimer username={currentUser} lang={language} />}
-                        {activeTab === 'tasks' && <TaskManager username={currentUser} lang={language} />}
-                        {activeTab === 'flashcards' && <Flashcards username={currentUser} lang={language} />}
-                        {activeTab === 'quiz' && <Quiz lang={language} />}
-                        {activeTab === 'ai' && <AIHelper lang={language} />}
-                    </div>
-                </div>
-            );
-        }
-
-        ReactDOM.render(<App />, document.getElementById('root'));
-
-        // Initialize AdSense
-        (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="lang-row">
+      <select class="lang-sel" id="login-lang" onchange="setLang(this.value)">
+        <option value="en">🇬🇧 English</option>
+        <option value="nl">🇳🇱 Nederlands</option>
+        <option value="fr">🇫🇷 Français</option>
+      </select>
+    </div>
+    <div class="login-logo">
+      <div class="logo-icon-big">🎓</div>
+      <div class="login-title">StudyBoost AI</div>
+      <div class="login-sub" id="l-tagline"></div>
+    </div>
+    <div class="warn-box" id="l-warn"></div>
+    <div id="login-err" class="err-box hidden"></div>
+    <div class="field"><label id="l-uname"></label><input id="inp-user" type="text"/></div>
+    <div class="field"><label id="l-pwd"></label><input id="inp-pwd" type="password"/></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:10px" id="btn-login" onclick="doLogin()"></button>
+    <button class="btn btn-ghost" style="width:100%;justify-content:center" id="btn-toggle" onclick="toggleMode()"></button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app-screen" class="hidden">
+  <div class="header">
+    <div class="logo-row">
+      <div class="logo-icon">🎓</div>
+      <div><div class="logo-name">StudyBoost AI</div><div class="logo-tag" id="a-tagline"></div></div>
+    </div>
+    <div class="user-row">
+      <select class="lang-sel" id="app-lang" onchange="setLang(this.value)">
+        <option value="en">🇬🇧 English</option>
+        <option value="nl">🇳🇱 Nederlands</option>
+        <option value="fr">🇫🇷 Français</option>
+      </select>
+      <span id="welcome-msg" style="color:var(--muted);font-size:14px"></span>
+      <button class="btn btn-ghost btn-sm" onclick="doLogout()" id="btn-logout"></button>
+    </div>
+  </div>
+  <div class="nav-bar" id="nav-bar"></div>
+  <div id="tab-content"></div>
+</div>
+
+<script>
+const GEMINI_KEY = 'AIzaSyBAqjm33nUY1mQuInz8hBkh4ROc3FoUtRI';
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + GEMINI_KEY;
+
+const T = {
+  en:{tag:"Your Smart Study Companion",warn:"⚠️ Passwords stored locally. Don't use a sensitive password.",
+    ul:"Username",pw:"Password",login:"Login",signup:"Sign Up",
+    hasAcc:"Already have an account? Login",noAcc:"Don't have an account? Sign Up",
+    wel:"Welcome",out:"Logout",
+    tabs:["Dashboard","Focus Timer","Tasks","Flashcards","Quiz","AI Helper"],
+    ms:"Minutes Studied",td:"Tasks Completed",dg:"Daily Goal",
+    dp:"Daily Progress",gl:"Goal",gc:"Goal completed! 🎉",mr:"minutes remaining",
+    st:"Sessions today",go:"Start",pa:"Pause",re:"Reset",
+    tsk:"Study Tasks",tt:"Task title",sub:"Subject",
+    lo:"Low",me:"Medium",hi:"High",at:"Add Task",dn:"Done",un:"Undo",dl:"Delete",
+    fc:"Flashcards",q:"Question",a:"Answer",pr:"Previous",nx:"Next",fl:"Flip Card",
+    nc:"Create New Flashcard",qe:"Enter question",ae:"Enter answer",ac:"Add Flashcard",
+    qz:"Quiz",sc:"Score",sb:"Submit Answer",nq:"Next Question",fq:"Finish Quiz",
+    qc:"Quiz complete! Your score",rs:"Restart",
+    ai:"AI Study Helper",pb:"Powered by Gemini",
+    gr:"Hi! I'm your Gemini study assistant 🎓\nAsk me anything, paste notes, upload an image, or share a link!",
+    ph:"Ask a question, paste notes, or share a link…",sd:"Send",
+    up:"Upload Image",dr:"Drag & drop an image, or click to upload",an:"Analysing…",
+    fa:"Please fill in all fields",ue:"Username already exists",bc:"Invalid username or password",
+    q1:"What is the chemical formula for water?",q2:"Who painted the Mona Lisa?",q3:"What is the largest planet in our solar system?"},
+  nl:{tag:"Jouw Slimme Studiepartner",warn:"⚠️ Wachtwoorden lokaal opgeslagen. Gebruik geen gevoelig wachtwoord.",
+    ul:"Gebruikersnaam",pw:"Wachtwoord",login:"Inloggen",signup:"Registreren",
+    hasAcc:"Heb je al een account? Inloggen",noAcc:"Heb je geen account? Registreren",
+    wel:"Welkom",out:"Uitloggen",
+    tabs:["Dashboard","Focus Timer","Taken","Flashcards","Quiz","AI Assistent"],
+    ms:"Minuten Gestudeerd",td:"Taken Voltooid",dg:"Dagelijks Doel",
+    dp:"Dagelijkse Voortgang",gl:"Doel",gc:"Doel behaald! 🎉",mr:"minuten resterend",
+    st:"Sessies vandaag",go:"Start",pa:"Pauzeer",re:"Reset",
+    tsk:"Studietaken",tt:"Taaknaam",sub:"Onderwerp",
+    lo:"Laag",me:"Middel",hi:"Hoog",at:"Taak Toevoegen",dn:"Klaar",un:"Ongedaan",dl:"Verwijder",
+    fc:"Flashcards",q:"Vraag",a:"Antwoord",pr:"Vorige",nx:"Volgende",fl:"Omdraaien",
+    nc:"Nieuwe Flashcard",qe:"Voer vraag in",ae:"Voer antwoord in",ac:"Toevoegen",
+    qz:"Quiz",sc:"Score",sb:"Bevestig",nq:"Volgende",fq:"Afronden",
+    qc:"Quiz voltooid! Jouw score",rs:"Opnieuw",
+    ai:"AI Studie Assistent",pb:"Aangedreven door Gemini",
+    gr:"Hallo! Ik ben je Gemini-studieassistent 🎓\nStel vragen, plak notities, upload een afbeelding of deel een link!",
+    ph:"Stel een vraag, plak notities of deel een link…",sd:"Verzenden",
+    up:"Afbeelding uploaden",dr:"Sleep een afbeelding hier of klik om te uploaden",an:"Analyseren…",
+    fa:"Vul alle velden in",ue:"Gebruikersnaam bestaat al",bc:"Ongeldige gebruikersnaam of wachtwoord",
+    q1:"Wat is de chemische formule van water?",q2:"Wie schilderde de Mona Lisa?",q3:"Wat is de grootste planeet in ons zonnestelsel?"},
+  fr:{tag:"Votre Compagnon d'Étude Intelligent",warn:"⚠️ Mots de passe stockés localement. N'utilisez pas un mot de passe sensible.",
+    ul:"Nom d'utilisateur",pw:"Mot de passe",login:"Connexion",signup:"S'inscrire",
+    hasAcc:"Vous avez déjà un compte? Connexion",noAcc:"Vous n'avez pas de compte? S'inscrire",
+    wel:"Bienvenue",out:"Déconnexion",
+    tabs:["Tableau de Bord","Minuteur Focus","Tâches","Cartes Mémoire","Quiz","Assistant IA"],
+    ms:"Minutes Étudiées",td:"Tâches Terminées",dg:"Objectif Quotidien",
+    dp:"Progrès Quotidien",gl:"Objectif",gc:"Objectif atteint! 🎉",mr:"minutes restantes",
+    st:"Sessions aujourd'hui",go:"Démarrer",pa:"Pause",re:"Réinitialiser",
+    tsk:"Tâches d'Étude",tt:"Titre de la tâche",sub:"Sujet",
+    lo:"Bas",me:"Moyen",hi:"Haut",at:"Ajouter",dn:"Terminé",un:"Annuler",dl:"Supprimer",
+    fc:"Cartes Mémoire",q:"Question",a:"Réponse",pr:"Précédent",nx:"Suivant",fl:"Retourner",
+    nc:"Créer une Carte",qe:"Entrez la question",ae:"Entrez la réponse",ac:"Ajouter",
+    qz:"Quiz",sc:"Score",sb:"Soumettre",nq:"Suivant",fq:"Terminer",
+    qc:"Quiz terminé! Votre score",rs:"Recommencer",
+    ai:"Assistant IA d'Étude",pb:"Propulsé par Gemini",
+    gr:"Bonjour! Je suis votre assistant Gemini 🎓\nPosez des questions, collez vos notes, téléchargez une image ou partagez un lien!",
+    ph:"Posez une question, collez des notes ou partagez un lien…",sd:"Envoyer",
+    up:"Télécharger image",dr:"Glissez-déposez une image ici ou cliquez",an:"Analyse…",
+    fa:"Veuillez remplir tous les champs",ue:"Nom d'utilisateur déjà pris",bc:"Identifiants invalides",
+    q1:"Quelle est la formule chimique de l'eau?",q2:"Qui a peint la Joconde?",q3:"Quelle est la plus grande planète du système solaire?"}
+};
+
+var lang = localStorage.getItem('sb_lang') || 'en';
+var currentUser = localStorage.getItem('sb_user') || null;
+var isSignup = false;
+var activeTab = 0;
+var timerMin = 25, timerSec = 0, timerRunning = false, timerInterval = null;
+var chatMsgs = [];
+var chatLoading = false;
+var pendingImg = null;
+var fcIdx = 0, fcFlipped = false;
+var quizIdx = 0, quizScore = 0, quizSel = null, quizAnswered = false, quizDone = false;
+
+function t(k){ return T[lang][k] || k; }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
+function pad(n){ return String(n).padStart(2,'0'); }
+
+function save(key,val){ localStorage.setItem('sb_'+currentUser+'_'+key, typeof val==='object'?JSON.stringify(val):String(val)); }
+function load(key,def){
+  var v=localStorage.getItem('sb_'+currentUser+'_'+key);
+  if(v===null) return def;
+  try{ return JSON.parse(v); }catch(e){ return v; }
+}
+
+function setLang(l){
+  lang=l;
+  localStorage.setItem('sb_lang',l);
+  document.getElementById('login-lang').value=l;
+  var al=document.getElementById('app-lang');
+  if(al) al.value=l;
+  refreshLogin();
+  if(currentUser) refreshApp();
+}
+
+function refreshLogin(){
+  document.getElementById('l-tagline').textContent=t('tag');
+  document.getElementById('l-warn').textContent=t('warn');
+  document.getElementById('l-uname').textContent=t('ul');
+  document.getElementById('l-pwd').textContent=t('pw');
+  document.getElementById('inp-user').placeholder=t('ul');
+  document.getElementById('inp-pwd').placeholder=t('pw');
+  document.getElementById('btn-login').textContent=isSignup?t('signup'):t('login');
+  document.getElementById('btn-toggle').textContent=isSignup?t('hasAcc'):t('noAcc');
+}
+
+function refreshApp(){
+  document.getElementById('a-tagline').textContent=t('tag');
+  document.getElementById('welcome-msg').innerHTML=t('wel')+', <strong>'+currentUser+'</strong>';
+  document.getElementById('btn-logout').textContent=t('out');
+  document.getElementById('app-lang').value=lang;
+  renderNav();
+  renderTab();
+}
+
+function toggleMode(){
+  isSignup=!isSignup;
+  document.getElementById('btn-login').textContent=isSignup?t('signup'):t('login');
+  document.getElementById('btn-toggle').textContent=isSignup?t('hasAcc'):t('noAcc');
+  document.getElementById('login-err').classList.add('hidden');
+}
+
+function showErr(msg){
+  var el=document.getElementById('login-err');
+  el.textContent=msg; el.classList.toggle('hidden',!msg);
+}
+
+function doLogin(){
+  var user=document.getElementById('inp-user').value.trim();
+  var pwd=document.getElementById('inp-pwd').value;
+  if(!user||!pwd){ showErr(t('fa')); return; }
+  var users=JSON.parse(localStorage.getItem('sb_users')||'{}');
+  if(isSignup){
+    if(users[user]){ showErr(t('ue')); return; }
+    users[user]=pwd; localStorage.setItem('sb_users',JSON.stringify(users));
+  } else {
+    if(users[user]!==pwd){ showErr(t('bc')); return; }
+  }
+  localStorage.setItem('sb_user',user);
+  currentUser=user;
+  chatMsgs=[{role:'ai',text:t('gr')}];
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app-screen').classList.remove('hidden');
+  refreshApp();
+}
+
+function doLogout(){
+  localStorage.removeItem('sb_user');
+  currentUser=null;
+  timerRunning=false; clearInterval(timerInterval);
+  document.getElementById('app-screen').classList.add('hidden');
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('inp-user').value='';
+  document.getElementById('inp-pwd').value='';
+  refreshLogin();
+}
+
+function renderNav(){
+  var nb=document.getElementById('nav-bar');
+  nb.innerHTML=t('tabs').map(function(label,i){
+    return '<button class="nav-btn'+(activeTab===i?' active':'')+'" onclick="switchTab('+i+')">'+label+'</button>';
+  }).join('');
+}
+
+function switchTab(i){
+  activeTab=i;
+  if(i===4){ quizIdx=0;quizScore=0;quizSel=null;quizAnswered=false;quizDone=false; }
+  renderNav(); renderTab();
+}
+
+function renderTab(){
+  var el=document.getElementById('tab-content');
+  switch(activeTab){
+    case 0: el.innerHTML=renderDashboard(); break;
+    case 1: el.innerHTML=renderTimer(); break;
+    case 2: el.innerHTML=renderTasks(); break;
+    case 3: el.innerHTML=renderFlashcards(); break;
+    case 4: el.innerHTML=renderQuiz(); break;
+    case 5: el.innerHTML=renderAI(); bindAI(); break;
+  }
+}
+
+/* DASHBOARD */
+function renderDashboard(){
+  var mins=parseInt(load('studyTime',0));
+  var tasks=parseInt(load('tasksCompleted',0));
+  var goal=120, pct=Math.min(Math.round(mins/goal*100),100);
+  return '<div class="stats-grid">'+
+    '<div class="stat-card"><div class="stat-val">'+mins+'</div><div class="stat-lbl">'+t('ms')+'</div></div>'+
+    '<div class="stat-card"><div class="stat-val">'+tasks+'</div><div class="stat-lbl">'+t('td')+'</div></div>'+
+    '<div class="stat-card"><div class="stat-val">'+pct+'%</div><div class="stat-lbl">'+t('dg')+'</div></div>'+
+    '</div><div class="card"><h2>'+t('dp')+'</h2>'+
+    '<p>'+t('gl')+': '+goal+' '+t('ms').toLowerCase()+'</p>'+
+    '<div class="prog-bar"><div class="prog-fill" style="width:'+pct+'%"></div></div>'+
+    '<p style="color:var(--muted);font-size:14px">'+(mins>=goal?t('gc'):(goal-mins)+' '+t('mr'))+'</p></div>';
+}
+
+/* TIMER */
+function renderTimer(){
+  var sess=parseInt(load('sessions',0));
+  return '<div class="card"><h2>'+t('tabs')[1]+' (Pomodoro)</h2>'+
+    '<p style="color:var(--muted);margin-bottom:12px">'+t('st')+': <span id="sess-cnt">'+sess+'</span></p>'+
+    '<div class="timer-big" id="tmr">'+pad(timerMin)+':'+pad(timerSec)+'</div>'+
+    '<div class="timer-btns">'+
+    '<button class="btn '+(timerRunning?'btn-danger':'btn-primary')+'" id="tmr-btn" onclick="toggleTimer()">'+
+    (timerRunning?t('pa'):t('go'))+'</button>'+
+    '<button class="btn btn-ghost" onclick="resetTimer()">'+t('re')+'</button></div></div>';
+}
+
+function toggleTimer(){
+  timerRunning=!timerRunning;
+  if(timerRunning){ timerInterval=setInterval(tickTimer,1000); }
+  else { clearInterval(timerInterval); }
+  var btn=document.getElementById('tmr-btn');
+  if(btn){ btn.textContent=timerRunning?t('pa'):t('go'); btn.className='btn '+(timerRunning?'btn-danger':'btn-primary'); }
+}
+
+function tickTimer(){
+  if(timerSec>0){ timerSec--; }
+  else if(timerMin>0){ timerMin--; timerSec=59; }
+  else {
+    clearInterval(timerInterval); timerRunning=false;
+    var s=parseInt(load('sessions',0))+1; save('sessions',s);
+    var st=parseInt(load('studyTime',0))+25; save('studyTime',st);
+    timerMin=25; timerSec=0;
+    alert('Pomodoro complete! Take a break. ☕');
+    renderTab(); return;
+  }
+  var d=document.getElementById('tmr');
+  if(d) d.textContent=pad(timerMin)+':'+pad(timerSec);
+}
+
+function resetTimer(){
+  clearInterval(timerInterval); timerRunning=false;
+  timerMin=25; timerSec=0; renderTab();
+}
+
+/* TASKS */
+function renderTasks(){
+  var tasks=load('tasks',[]);
+  var items=tasks.map(function(task,i){
+    return '<div class="task-item" style="opacity:'+(task.done?'.6':'1')+'">'+
+      '<div><div class="task-name" style="text-decoration:'+(task.done?'line-through':'none')+'">'+esc(task.title)+'</div>'+
+      '<div class="task-meta">'+esc(task.subject)+'</div></div>'+
+      '<div class="task-right"><span class="badge badge-'+task.priority+'">'+t(task.priority=='low'?'lo':task.priority=='high'?'hi':'me')+'</span>'+
+      '<button class="btn btn-sm '+(task.done?'btn-ghost':'btn-success')+'" onclick="toggleTask('+i+')">'+
+      (task.done?t('un'):t('dn'))+'</button>'+
+      '<button class="btn btn-sm btn-danger" onclick="deleteTask('+i+')">'+t('dl')+'</button></div></div>';
+  }).join('');
+  return '<div class="card"><h2>'+t('tsk')+'</h2>'+
+    '<div class="task-form">'+
+    '<input id="nt" type="text" placeholder="'+t('tt')+'"/>'+
+    '<input id="ns" type="text" placeholder="'+t('sub')+'"/>'+
+    '<select id="np"><option value="low">'+t('lo')+'</option><option value="medium" selected>'+t('me')+'</option><option value="high">'+t('hi')+'</option></select>'+
+    '<button class="btn btn-primary task-form-btn" onclick="addTask()">'+t('at')+'</button></div>'+
+    '<div class="task-list">'+(items||'<p style="color:var(--muted);font-size:14px">No tasks yet.</p>')+'</div></div>';
+}
+
+function addTask(){
+  var title=document.getElementById('nt').value.trim();
+  var subj=document.getElementById('ns').value.trim();
+  var prio=document.getElementById('np').value;
+  if(!title||!subj) return;
+  var tasks=load('tasks',[]); tasks.push({title:title,subject:subj,priority:prio,done:false});
+  save('tasks',tasks); renderTab();
+}
+
+function toggleTask(i){
+  var tasks=load('tasks',[]);
+  tasks[i].done=!tasks[i].done;
+  var cnt=parseInt(load('tasksCompleted',0));
+  save('tasksCompleted',tasks[i].done?cnt+1:Math.max(0,cnt-1));
+  save('tasks',tasks); renderTab();
+}
+
+function deleteTask(i){
+  var tasks=load('tasks',[]); tasks.splice(i,1);
+  save('tasks',tasks); renderTab();
+}
+
+/* FLASHCARDS */
+function renderFlashcards(){
+  var cards=load('flashcards',[]);
+  var viewer='<p style="color:var(--muted);margin-bottom:16px">No flashcards yet. Create one below!</p>';
+  if(cards.length){
+    if(fcIdx>=cards.length) fcIdx=0;
+    var c=cards[fcIdx];
+    viewer='<p style="color:var(--muted);font-size:13px;margin-bottom:6px">'+(fcIdx+1)+' / '+cards.length+'</p>'+
+      '<div class="fc-wrap" onclick="flipCard()">'+
+      '<div class="fc-inner'+(fcFlipped?' flipped':'')+'" id="fc-inner">'+
+      '<div class="fc-face fc-front"><span class="fc-label">'+t('q')+'</span><span>'+esc(c.question)+'</span></div>'+
+      '<div class="fc-face fc-back"><span class="fc-label">'+t('a')+'</span><span>'+esc(c.answer)+'</span></div>'+
+      '</div></div>'+
+      '<div class="fc-controls">'+
+      '<button class="btn btn-ghost" onclick="prevCard()">'+t('pr')+'</button>'+
+      '<button class="btn btn-primary" onclick="flipCard()">'+t('fl')+'</button>'+
+      '<button class="btn btn-ghost" onclick="nextCard()">'+t('nx')+'</button></div>';
+  }
+  return '<div class="card"><h2>'+t('fc')+'</h2>'+viewer+'</div>'+
+    '<div class="card"><h3>'+t('nc')+'</h3>'+
+    '<div class="field"><label>'+t('q')+'</label><input id="fc-q" type="text" placeholder="'+t('qe')+'"/></div>'+
+    '<div class="field"><label>'+t('a')+'</label><textarea id="fc-a" rows="3" style="width:100%;padding:10px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px" placeholder="'+t('ae')+'"></textarea></div>'+
+    '<button class="btn btn-primary" onclick="addCard()">'+t('ac')+'</button></div>';
+}
+
+function flipCard(){ fcFlipped=!fcFlipped; var el=document.getElementById('fc-inner'); if(el) el.className='fc-inner'+(fcFlipped?' flipped':''); }
+function nextCard(){ var c=load('flashcards',[]); if(!c.length)return; fcFlipped=false; fcIdx=(fcIdx+1)%c.length; renderTab(); }
+function prevCard(){ var c=load('flashcards',[]); if(!c.length)return; fcFlipped=false; fcIdx=(fcIdx-1+c.length)%c.length; renderTab(); }
+function addCard(){
+  var q=document.getElementById('fc-q').value.trim();
+  var a=document.getElementById('fc-a').value.trim();
+  if(!q||!a) return;
+  var cards=load('flashcards',[]); cards.push({question:q,answer:a});
+  save('flashcards',cards); fcIdx=cards.length-1; fcFlipped=false; renderTab();
+}
+
+/* QUIZ */
+function getQs(){
+  return [
+    {q:t('q1'),opts:['H₂O','CO₂','O₂','H₂O₂'],ans:0},
+    {q:t('q2'),opts:['Michelangelo','Leonardo da Vinci','Raphael','Donatello'],ans:1},
+    {q:t('q3'),opts:['Earth','Mars','Jupiter','Saturn'],ans:2}
+  ];
+}
+
+function renderQuiz(){
+  var qs=getQs();
+  if(quizDone) return '<div class="card" style="text-align:center">'+
+    '<div style="font-size:52px;margin-bottom:12px">🎉</div>'+
+    '<h2>'+t('qc')+'</h2>'+
+    '<div style="font-size:52px;font-weight:700;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:14px 0">'+quizScore+'/'+qs.length+'</div>'+
+    '<button class="btn btn-primary" onclick="restartQuiz()">'+t('rs')+'</button></div>';
+  var q=qs[quizIdx];
+  var opts=q.opts.map(function(o,i){
+    var cls='q-option';
+    if(quizAnswered){ if(i===q.ans) cls+=' correct'; else if(i===quizSel) cls+=' wrong'; }
+    else if(i===quizSel) cls+=' sel';
+    return '<div class="'+cls+'" onclick="selectOpt('+i+')">'+o+'</div>';
+  }).join('');
+  var actionBtn=!quizAnswered
+    ?'<button class="btn btn-primary" onclick="submitQuiz()"'+(quizSel===null?' disabled':'')+'>'+t('sb')+'</button>'
+    :'<button class="btn btn-primary" onclick="nextQuiz()">'+(quizIdx<qs.length-1?t('nq'):t('fq'))+'</button>';
+  return '<div class="card"><h2>'+t('qz')+'</h2>'+
+    '<p style="color:var(--muted);margin-bottom:20px">'+t('q')+' '+(quizIdx+1)+'/'+qs.length+' | '+t('sc')+': '+quizScore+'</p>'+
+    '<h3 style="margin-bottom:20px">'+esc(q.q)+'</h3>'+opts+
+    '<div style="margin-top:16px">'+actionBtn+'</div></div>';
+}
+
+function selectOpt(i){ if(quizAnswered)return; quizSel=i; renderTab(); }
+function submitQuiz(){ if(quizSel===null)return; quizAnswered=true; if(quizSel===getQs()[quizIdx].ans) quizScore++; renderTab(); }
+function nextQuiz(){ if(quizIdx<getQs().length-1){ quizIdx++;quizSel=null;quizAnswered=false;renderTab(); }else{ quizDone=true;renderTab(); } }
+function restartQuiz(){ quizIdx=0;quizScore=0;quizSel=null;quizAnswered=false;quizDone=false;renderTab(); }
+
+/* AI */
+function renderAI(){
+  var msgs=chatMsgs.map(function(m){
+    var img=m.img?'<img src="'+m.img+'" alt="uploaded"/>':'';
+    return '<div class="msg '+m.role+'">'+esc(m.text)+img+'</div>';
+  }).join('');
+  var loading=chatLoading?'<div class="msg loading">✨ '+t('an')+'</div>':'';
+  var preview=pendingImg
+    ?'<img class="upload-preview" src="'+pendingImg.preview+'" alt="preview"/>'
+    :'<div class="uz-icon">📸</div><p>'+t('dr')+'</p>';
+  return '<div class="card">'+
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">'+
+    '<h2 style="margin:0">'+t('ai')+'</h2>'+
+    '<span class="gemini-badge">✨ '+t('pb')+'</span></div>'+
+    '<div class="upload-zone" id="uz">'+preview+'</div>'+
+    '<input type="file" id="fi" accept="image/*" style="display:none"/>'+
+    '<div class="chat-box" id="chat-box">'+msgs+loading+'</div>'+
+    '<div class="chat-input-row">'+
+    '<input class="chat-input" id="chat-inp" type="text" placeholder="'+t('ph')+'"/>'+
+    '<button class="btn btn-primary" id="send-btn" onclick="sendAI()">'+t('sd')+'</button>'+
+    '</div></div>';
+}
+
+function bindAI(){
+  var uz=document.getElementById('uz');
+  var fi=document.getElementById('fi');
+  if(!uz||!fi) return;
+  uz.onclick=function(){ fi.click(); };
+  uz.ondragover=function(e){ e.preventDefault(); uz.classList.add('over'); };
+  uz.ondragleave=function(){ uz.classList.remove('over'); };
+  uz.ondrop=function(e){ e.preventDefault(); uz.classList.remove('over'); handleFile(e.dataTransfer.files[0]); };
+  fi.onchange=function(e){ handleFile(e.target.files[0]); };
+  var ci=document.getElementById('chat-inp');
+  if(ci) ci.onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey) sendAI(); };
+  var box=document.getElementById('chat-box');
+  if(box) box.scrollTop=box.scrollHeight;
+}
+
+function handleFile(file){
+  if(!file||!file.type.startsWith('image/')) return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    pendingImg={base64:e.target.result.split(',')[1],mime:file.type,preview:e.target.result};
+    document.getElementById('tab-content').innerHTML=renderAI(); bindAI();
+  };
+  reader.readAsDataURL(file);
+}
+
+function sendAI(){
+  var inp=document.getElementById('chat-inp');
+  var text=inp?inp.value.trim():'';
+  if(!text&&!pendingImg) return;
+  if(inp) inp.value='';
+  var imgSnap=pendingImg; pendingImg=null;
+  chatMsgs.push({role:'user',text:text||(t('up')),img:imgSnap?imgSnap.preview:null});
+  chatLoading=true;
+  document.getElementById('tab-content').innerHTML=renderAI(); bindAI();
+  var parts=[];
+  if(imgSnap) parts.push({inline_data:{mime_type:imgSnap.mime,data:imgSnap.base64}});
+  var prompt=text||'Describe this image and list key study concepts.';
+  parts.push({text:'You are a helpful, concise study assistant. '+prompt});
+  fetch(GEMINI_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    mode:'cors',
+    body:JSON.stringify({contents:[{parts:parts}]})
+  })
+  .then(function(r){
+    if(!r.ok) return r.json().then(function(e){ throw new Error((e.error&&e.error.message)||('HTTP '+r.status)); });
+    return r.json();
+  })
+  .then(function(data){
+    var reply='No response from Gemini.';
+    try{ reply=data.candidates[0].content.parts[0].text; }catch(e){}
+    if(data.error) reply='API Error: '+data.error.message;
+    chatMsgs.push({role:'ai',text:reply});
+  })
+  .catch(function(err){
+    var msg=err.message||'Unknown error';
+    if(msg.indexOf('Failed to fetch')>-1||msg.indexOf('NetworkError')>-1){
+      msg='Network error — if running from a local file, try hosting the page on a server (e.g. VS Code Live Server, or upload to GitHub Pages / Netlify).';
+    }
+    chatMsgs.push({role:'ai',text:'❌ '+msg});
+  })
+  .finally(function(){
+    chatLoading=false;
+    document.getElementById('tab-content').innerHTML=renderAI(); bindAI();
+    var box=document.getElementById('chat-box');
+    if(box) box.scrollTop=box.scrollHeight;
+  });
+}
+
+/* INIT */
+document.getElementById('login-lang').value=lang;
+refreshLogin();
+if(currentUser){
+  chatMsgs=[{role:'ai',text:T[lang].gr}];
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app-screen').classList.remove('hidden');
+  refreshApp();
+}
+</script>
 </body>
 </html>

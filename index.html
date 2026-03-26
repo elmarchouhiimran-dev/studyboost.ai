@@ -1,3 +1,6 @@
+Here's the full code — select all and copy:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -154,7 +157,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <script>
-const GEMINI_KEY = 'AIzaSyBAqjm33nUY1mQuInz8hBkh4ROc3FoUtRI';
+const GEMINI_KEY = 'AIzaSyCb3PCVaRYdcdg9omR77UsRslsAyfkt1Ac';
 const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + GEMINI_KEY;
 
 const T = {
@@ -243,13 +246,10 @@ function load(key,def){
 }
 
 function setLang(l){
-  lang=l;
-  localStorage.setItem('sb_lang',l);
+  lang=l; localStorage.setItem('sb_lang',l);
   document.getElementById('login-lang').value=l;
-  var al=document.getElementById('app-lang');
-  if(al) al.value=l;
-  refreshLogin();
-  if(currentUser) refreshApp();
+  var al=document.getElementById('app-lang'); if(al) al.value=l;
+  refreshLogin(); if(currentUser) refreshApp();
 }
 
 function refreshLogin(){
@@ -268,8 +268,7 @@ function refreshApp(){
   document.getElementById('welcome-msg').innerHTML=t('wel')+', <strong>'+currentUser+'</strong>';
   document.getElementById('btn-logout').textContent=t('out');
   document.getElementById('app-lang').value=lang;
-  renderNav();
-  renderTab();
+  renderNav(); renderTab();
 }
 
 function toggleMode(){
@@ -295,8 +294,7 @@ function doLogin(){
   } else {
     if(users[user]!==pwd){ showErr(t('bc')); return; }
   }
-  localStorage.setItem('sb_user',user);
-  currentUser=user;
+  localStorage.setItem('sb_user',user); currentUser=user;
   chatMsgs=[{role:'ai',text:t('gr')}];
   document.getElementById('login-screen').classList.add('hidden');
   document.getElementById('app-screen').classList.remove('hidden');
@@ -304,8 +302,7 @@ function doLogin(){
 }
 
 function doLogout(){
-  localStorage.removeItem('sb_user');
-  currentUser=null;
+  localStorage.removeItem('sb_user'); currentUser=null;
   timerRunning=false; clearInterval(timerInterval);
   document.getElementById('app-screen').classList.add('hidden');
   document.getElementById('login-screen').classList.remove('hidden');
@@ -339,7 +336,6 @@ function renderTab(){
   }
 }
 
-/* DASHBOARD */
 function renderDashboard(){
   var mins=parseInt(load('studyTime',0));
   var tasks=parseInt(load('tasksCompleted',0));
@@ -354,7 +350,6 @@ function renderDashboard(){
     '<p style="color:var(--muted);font-size:14px">'+(mins>=goal?t('gc'):(goal-mins)+' '+t('mr'))+'</p></div>';
 }
 
-/* TIMER */
 function renderTimer(){
   var sess=parseInt(load('sessions',0));
   return '<div class="card"><h2>'+t('tabs')[1]+' (Pomodoro)</h2>'+
@@ -394,7 +389,6 @@ function resetTimer(){
   timerMin=25; timerSec=0; renderTab();
 }
 
-/* TASKS */
 function renderTasks(){
   var tasks=load('tasks',[]);
   var items=tasks.map(function(task,i){
@@ -437,7 +431,6 @@ function deleteTask(i){
   save('tasks',tasks); renderTab();
 }
 
-/* FLASHCARDS */
 function renderFlashcards(){
   var cards=load('flashcards',[]);
   var viewer='<p style="color:var(--muted);margin-bottom:16px">No flashcards yet. Create one below!</p>';
@@ -473,7 +466,6 @@ function addCard(){
   save('flashcards',cards); fcIdx=cards.length-1; fcFlipped=false; renderTab();
 }
 
-/* QUIZ */
 function getQs(){
   return [
     {q:t('q1'),opts:['H₂O','CO₂','O₂','H₂O₂'],ans:0},
@@ -510,7 +502,6 @@ function submitQuiz(){ if(quizSel===null)return; quizAnswered=true; if(quizSel==
 function nextQuiz(){ if(quizIdx<getQs().length-1){ quizIdx++;quizSel=null;quizAnswered=false;renderTab(); }else{ quizDone=true;renderTab(); } }
 function restartQuiz(){ quizIdx=0;quizScore=0;quizSel=null;quizAnswered=false;quizDone=false;renderTab(); }
 
-/* AI */
 function renderAI(){
   var msgs=chatMsgs.map(function(m){
     var img=m.img?'<img src="'+m.img+'" alt="uploaded"/>':'';
@@ -590,7 +581,7 @@ function sendAI(){
   .catch(function(err){
     var msg=err.message||'Unknown error';
     if(msg.indexOf('Failed to fetch')>-1||msg.indexOf('NetworkError')>-1){
-      msg='Network error — if running from a local file, try hosting the page on a server (e.g. VS Code Live Server, or upload to GitHub Pages / Netlify).';
+      msg='Network error — please make sure you are accessing this page via https://';
     }
     chatMsgs.push({role:'ai',text:'❌ '+msg});
   })
@@ -602,7 +593,6 @@ function sendAI(){
   });
 }
 
-/* INIT */
 document.getElementById('login-lang').value=lang;
 refreshLogin();
 if(currentUser){
@@ -614,3 +604,6 @@ if(currentUser){
 </script>
 </body>
 </html>
+```
+
+Copy all of that, paste into GitHub replacing everything, then commit. ✅

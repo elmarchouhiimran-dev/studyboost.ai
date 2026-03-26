@@ -1,6 +1,3 @@
-Here's the full code — select all and copy:
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,9 +22,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .warn-box{background:#fef3c7;border:1px solid #f59e0b;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;margin-bottom:16px}
 .field{margin-bottom:14px}
 .field label{display:block;margin-bottom:6px;font-weight:600;font-size:14px;color:var(--dark)}
-.field input,.field select{width:100%;padding:11px;border:2px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;transition:border-color .2s}
-.field input:focus,.field select:focus{outline:none;border-color:var(--primary)}
+.field input,.field select,.field textarea{width:100%;padding:11px;border:2px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;transition:border-color .2s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--primary)}
 .err-box{background:#fee2e2;color:var(--danger);border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px}
+.ok-box{background:#d1fae5;color:#065f46;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px}
 .lang-row{text-align:right;margin-bottom:14px}
 .lang-sel{padding:7px 12px;border:2px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
 #app-screen{max-width:1400px;margin:0 auto;padding:20px}
@@ -102,6 +100,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .upload-zone .uz-icon{font-size:28px;margin-bottom:6px}
 .upload-zone p{font-size:13px;color:var(--muted)}
 .upload-preview{max-height:110px;border-radius:8px}
+.settings-row{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--border)}
+.settings-row:last-child{border-bottom:none}
+.settings-label{font-weight:600;font-size:15px;color:var(--dark)}
+.settings-desc{font-size:13px;color:var(--muted);margin-top:2px}
+.toggle{position:relative;width:48px;height:26px;cursor:pointer}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:var(--border);border-radius:26px;transition:.3s}
+.toggle-slider:before{content:'';position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.3s}
+.toggle input:checked+.toggle-slider{background:linear-gradient(135deg,var(--primary),var(--secondary))}
+.toggle input:checked+.toggle-slider:before{transform:translateX(22px)}
+.danger-zone{background:#fff5f5;border:1px solid #fecaca;border-radius:12px;padding:20px;margin-top:8px}
+.danger-zone h3{color:var(--danger);margin-bottom:12px}
 @media(max-width:600px){
   .task-form{grid-template-columns:1fr}
   .timer-big{font-size:52px}
@@ -157,15 +167,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <script>
-const GEMINI_KEY = 'AIzaSyCb3PCVaRYdcdg9omR77UsRslsAyfkt1Ac';
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + GEMINI_KEY;
+var GEMINI_KEY = 'AIzaSyCb3PCVaRYdcdg9omR77UsRslsAyfkt1Ac';
+var GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + GEMINI_KEY;
 
-const T = {
+var T = {
   en:{tag:"Your Smart Study Companion",warn:"⚠️ Passwords stored locally. Don't use a sensitive password.",
     ul:"Username",pw:"Password",login:"Login",signup:"Sign Up",
     hasAcc:"Already have an account? Login",noAcc:"Don't have an account? Sign Up",
     wel:"Welcome",out:"Logout",
-    tabs:["Dashboard","Focus Timer","Tasks","Flashcards","Quiz","AI Helper"],
+    tabs:["Dashboard","Focus Timer","Tasks","Flashcards","Quiz","AI Helper","⚙️ Settings"],
     ms:"Minutes Studied",td:"Tasks Completed",dg:"Daily Goal",
     dp:"Daily Progress",gl:"Goal",gc:"Goal completed! 🎉",mr:"minutes remaining",
     st:"Sessions today",go:"Start",pa:"Pause",re:"Reset",
@@ -180,12 +190,18 @@ const T = {
     ph:"Ask a question, paste notes, or share a link…",sd:"Send",
     up:"Upload Image",dr:"Drag & drop an image, or click to upload",an:"Analysing…",
     fa:"Please fill in all fields",ue:"Username already exists",bc:"Invalid username or password",
-    q1:"What is the chemical formula for water?",q2:"Who painted the Mona Lisa?",q3:"What is the largest planet in our solar system?"},
+    q1:"What is the chemical formula for water?",q2:"Who painted the Mona Lisa?",q3:"What is the largest planet in our solar system?",
+    set:"Settings",setProfile:"Profile",setGoal:"Daily Study Goal",setGoalDesc:"Set your daily target in minutes",
+    setNotif:"Notifications",setNotifDesc:"Show alerts when Pomodoro session ends",
+    setReset:"Reset Progress",setResetDesc:"Clear all study time and session data",
+    setResetBtn:"Reset Data",setResetConfirm:"Are you sure? This will clear all your progress.",
+    setChangePwd:"Change Password",setNewPwd:"New Password",setConfirmPwd:"Confirm Password",
+    setAccount:"Account",setSave:"Save",setSaved:"Saved!",setPwdMismatch:"Passwords do not match",setPwdShort:"Password must be at least 4 characters"},
   nl:{tag:"Jouw Slimme Studiepartner",warn:"⚠️ Wachtwoorden lokaal opgeslagen. Gebruik geen gevoelig wachtwoord.",
     ul:"Gebruikersnaam",pw:"Wachtwoord",login:"Inloggen",signup:"Registreren",
     hasAcc:"Heb je al een account? Inloggen",noAcc:"Heb je geen account? Registreren",
     wel:"Welkom",out:"Uitloggen",
-    tabs:["Dashboard","Focus Timer","Taken","Flashcards","Quiz","AI Assistent"],
+    tabs:["Dashboard","Focus Timer","Taken","Flashcards","Quiz","AI Assistent","⚙️ Instellingen"],
     ms:"Minuten Gestudeerd",td:"Taken Voltooid",dg:"Dagelijks Doel",
     dp:"Dagelijkse Voortgang",gl:"Doel",gc:"Doel behaald! 🎉",mr:"minuten resterend",
     st:"Sessies vandaag",go:"Start",pa:"Pauzeer",re:"Reset",
@@ -200,12 +216,18 @@ const T = {
     ph:"Stel een vraag, plak notities of deel een link…",sd:"Verzenden",
     up:"Afbeelding uploaden",dr:"Sleep een afbeelding hier of klik om te uploaden",an:"Analyseren…",
     fa:"Vul alle velden in",ue:"Gebruikersnaam bestaat al",bc:"Ongeldige gebruikersnaam of wachtwoord",
-    q1:"Wat is de chemische formule van water?",q2:"Wie schilderde de Mona Lisa?",q3:"Wat is de grootste planeet in ons zonnestelsel?"},
+    q1:"Wat is de chemische formule van water?",q2:"Wie schilderde de Mona Lisa?",q3:"Wat is de grootste planeet in ons zonnestelsel?",
+    set:"Instellingen",setProfile:"Profiel",setGoal:"Dagelijks Studiedoel",setGoalDesc:"Stel je dagelijks doel in minuten in",
+    setNotif:"Meldingen",setNotifDesc:"Toon meldingen bij einde Pomodoro sessie",
+    setReset:"Voortgang Resetten",setResetDesc:"Wis alle studietijd en sessiedata",
+    setResetBtn:"Data Wissen",setResetConfirm:"Weet je het zeker? Dit wist al je voortgang.",
+    setChangePwd:"Wachtwoord Wijzigen",setNewPwd:"Nieuw Wachtwoord",setConfirmPwd:"Bevestig Wachtwoord",
+    setAccount:"Account",setSave:"Opslaan",setSaved:"Opgeslagen!",setPwdMismatch:"Wachtwoorden komen niet overeen",setPwdShort:"Wachtwoord moet minimaal 4 tekens zijn"},
   fr:{tag:"Votre Compagnon d'Étude Intelligent",warn:"⚠️ Mots de passe stockés localement. N'utilisez pas un mot de passe sensible.",
     ul:"Nom d'utilisateur",pw:"Mot de passe",login:"Connexion",signup:"S'inscrire",
     hasAcc:"Vous avez déjà un compte? Connexion",noAcc:"Vous n'avez pas de compte? S'inscrire",
     wel:"Bienvenue",out:"Déconnexion",
-    tabs:["Tableau de Bord","Minuteur Focus","Tâches","Cartes Mémoire","Quiz","Assistant IA"],
+    tabs:["Tableau de Bord","Minuteur Focus","Tâches","Cartes Mémoire","Quiz","Assistant IA","⚙️ Paramètres"],
     ms:"Minutes Étudiées",td:"Tâches Terminées",dg:"Objectif Quotidien",
     dp:"Progrès Quotidien",gl:"Objectif",gc:"Objectif atteint! 🎉",mr:"minutes restantes",
     st:"Sessions aujourd'hui",go:"Démarrer",pa:"Pause",re:"Réinitialiser",
@@ -220,7 +242,13 @@ const T = {
     ph:"Posez une question, collez des notes ou partagez un lien…",sd:"Envoyer",
     up:"Télécharger image",dr:"Glissez-déposez une image ici ou cliquez",an:"Analyse…",
     fa:"Veuillez remplir tous les champs",ue:"Nom d'utilisateur déjà pris",bc:"Identifiants invalides",
-    q1:"Quelle est la formule chimique de l'eau?",q2:"Qui a peint la Joconde?",q3:"Quelle est la plus grande planète du système solaire?"}
+    q1:"Quelle est la formule chimique de l'eau?",q2:"Qui a peint la Joconde?",q3:"Quelle est la plus grande planète du système solaire?",
+    set:"Paramètres",setProfile:"Profil",setGoal:"Objectif d'étude quotidien",setGoalDesc:"Définissez votre objectif quotidien en minutes",
+    setNotif:"Notifications",setNotifDesc:"Afficher les alertes de fin de session Pomodoro",
+    setReset:"Réinitialiser la progression",setResetDesc:"Effacer tout le temps d'étude et les données de session",
+    setResetBtn:"Effacer les données",setResetConfirm:"Êtes-vous sûr? Cela effacera toute votre progression.",
+    setChangePwd:"Changer le mot de passe",setNewPwd:"Nouveau mot de passe",setConfirmPwd:"Confirmer le mot de passe",
+    setAccount:"Compte",setSave:"Enregistrer",setSaved:"Enregistré!",setPwdMismatch:"Les mots de passe ne correspondent pas",setPwdShort:"Le mot de passe doit comporter au moins 4 caractères"}
 };
 
 var lang = localStorage.getItem('sb_lang') || 'en';
@@ -237,7 +265,6 @@ var quizIdx = 0, quizScore = 0, quizSel = null, quizAnswered = false, quizDone =
 function t(k){ return T[lang][k] || k; }
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
 function pad(n){ return String(n).padStart(2,'0'); }
-
 function save(key,val){ localStorage.setItem('sb_'+currentUser+'_'+key, typeof val==='object'?JSON.stringify(val):String(val)); }
 function load(key,def){
   var v=localStorage.getItem('sb_'+currentUser+'_'+key);
@@ -333,13 +360,16 @@ function renderTab(){
     case 3: el.innerHTML=renderFlashcards(); break;
     case 4: el.innerHTML=renderQuiz(); break;
     case 5: el.innerHTML=renderAI(); bindAI(); break;
+    case 6: el.innerHTML=renderSettings(); break;
   }
 }
 
+/* DASHBOARD */
 function renderDashboard(){
   var mins=parseInt(load('studyTime',0));
   var tasks=parseInt(load('tasksCompleted',0));
-  var goal=120, pct=Math.min(Math.round(mins/goal*100),100);
+  var goal=parseInt(load('dailyGoal',120));
+  var pct=Math.min(Math.round(mins/goal*100),100);
   return '<div class="stats-grid">'+
     '<div class="stat-card"><div class="stat-val">'+mins+'</div><div class="stat-lbl">'+t('ms')+'</div></div>'+
     '<div class="stat-card"><div class="stat-val">'+tasks+'</div><div class="stat-lbl">'+t('td')+'</div></div>'+
@@ -350,6 +380,7 @@ function renderDashboard(){
     '<p style="color:var(--muted);font-size:14px">'+(mins>=goal?t('gc'):(goal-mins)+' '+t('mr'))+'</p></div>';
 }
 
+/* TIMER */
 function renderTimer(){
   var sess=parseInt(load('sessions',0));
   return '<div class="card"><h2>'+t('tabs')[1]+' (Pomodoro)</h2>'+
@@ -377,7 +408,8 @@ function tickTimer(){
     var s=parseInt(load('sessions',0))+1; save('sessions',s);
     var st=parseInt(load('studyTime',0))+25; save('studyTime',st);
     timerMin=25; timerSec=0;
-    alert('Pomodoro complete! Take a break. ☕');
+    var notif=load('notifications','true');
+    if(notif==='true'||notif===true) alert('Pomodoro complete! Take a break. ☕');
     renderTab(); return;
   }
   var d=document.getElementById('tmr');
@@ -389,6 +421,7 @@ function resetTimer(){
   timerMin=25; timerSec=0; renderTab();
 }
 
+/* TASKS */
 function renderTasks(){
   var tasks=load('tasks',[]);
   var items=tasks.map(function(task,i){
@@ -431,6 +464,7 @@ function deleteTask(i){
   save('tasks',tasks); renderTab();
 }
 
+/* FLASHCARDS */
 function renderFlashcards(){
   var cards=load('flashcards',[]);
   var viewer='<p style="color:var(--muted);margin-bottom:16px">No flashcards yet. Create one below!</p>';
@@ -466,6 +500,7 @@ function addCard(){
   save('flashcards',cards); fcIdx=cards.length-1; fcFlipped=false; renderTab();
 }
 
+/* QUIZ */
 function getQs(){
   return [
     {q:t('q1'),opts:['H₂O','CO₂','O₂','H₂O₂'],ans:0},
@@ -502,6 +537,7 @@ function submitQuiz(){ if(quizSel===null)return; quizAnswered=true; if(quizSel==
 function nextQuiz(){ if(quizIdx<getQs().length-1){ quizIdx++;quizSel=null;quizAnswered=false;renderTab(); }else{ quizDone=true;renderTab(); } }
 function restartQuiz(){ quizIdx=0;quizScore=0;quizSel=null;quizAnswered=false;quizDone=false;renderTab(); }
 
+/* AI */
 function renderAI(){
   var msgs=chatMsgs.map(function(m){
     var img=m.img?'<img src="'+m.img+'" alt="uploaded"/>':'';
@@ -581,7 +617,7 @@ function sendAI(){
   .catch(function(err){
     var msg=err.message||'Unknown error';
     if(msg.indexOf('Failed to fetch')>-1||msg.indexOf('NetworkError')>-1){
-      msg='Network error — please make sure you are accessing this page via https://';
+      msg='Network error — make sure you are on https://';
     }
     chatMsgs.push({role:'ai',text:'❌ '+msg});
   })
@@ -593,6 +629,89 @@ function sendAI(){
   });
 }
 
+/* SETTINGS */
+function renderSettings(){
+  var goal=parseInt(load('dailyGoal',120));
+  var notif=load('notifications','true');
+  var notifChecked=(notif==='true'||notif===true)?'checked':'';
+  return '<div class="card">'+
+    '<h2>'+t('set')+'</h2>'+
+
+    '<h3 style="margin-bottom:4px">'+t('setProfile')+'</h3>'+
+    '<div class="settings-row">'+
+      '<div><div class="settings-label">'+t('setGoal')+'</div><div class="settings-desc">'+t('setGoalDesc')+'</div></div>'+
+      '<div style="display:flex;align-items:center;gap:8px">'+
+        '<input id="s-goal" type="number" min="10" max="480" value="'+goal+'" style="width:80px;padding:8px;border:2px solid var(--border);border-radius:8px;font-size:14px;text-align:center"/>'+
+        '<button class="btn btn-primary btn-sm" onclick="saveGoal()">'+t('setSave')+'</button>'+
+      '</div>'+
+    '</div>'+
+    '<div class="settings-row">'+
+      '<div><div class="settings-label">'+t('setNotif')+'</div><div class="settings-desc">'+t('setNotifDesc')+'</div></div>'+
+      '<label class="toggle"><input type="checkbox" id="s-notif" '+notifChecked+' onchange="saveNotif()"/><span class="toggle-slider"></span></label>'+
+    '</div>'+
+
+    '<h3 style="margin:20px 0 4px">'+t('setAccount')+'</h3>'+
+    '<div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:12px">'+
+      '<div><div class="settings-label">'+t('setChangePwd')+'</div></div>'+
+      '<div style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px">'+
+        '<input id="s-pwd1" type="password" placeholder="'+t('setNewPwd')+'" style="padding:10px;border:2px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit"/>'+
+        '<input id="s-pwd2" type="password" placeholder="'+t('setConfirmPwd')+'" style="padding:10px;border:2px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit"/>'+
+      '</div>'+
+      '<div id="pwd-msg"></div>'+
+      '<button class="btn btn-primary btn-sm" onclick="changePwd()">'+t('setSave')+'</button>'+
+    '</div>'+
+    '</div>'+
+
+    '<div class="danger-zone">'+
+      '<h3>⚠️ '+t('setReset')+'</h3>'+
+      '<p style="font-size:14px;color:var(--muted);margin-bottom:14px">'+t('setResetDesc')+'</p>'+
+      '<button class="btn btn-danger btn-sm" onclick="resetProgress()">'+t('setResetBtn')+'</button>'+
+    '</div>';
+}
+
+function saveGoal(){
+  var v=parseInt(document.getElementById('s-goal').value);
+  if(isNaN(v)||v<10) v=10;
+  if(v>480) v=480;
+  save('dailyGoal',v);
+  showSettingsSaved();
+}
+
+function saveNotif(){
+  var v=document.getElementById('s-notif').checked;
+  save('notifications',v);
+}
+
+function changePwd(){
+  var p1=document.getElementById('s-pwd1').value;
+  var p2=document.getElementById('s-pwd2').value;
+  var msg=document.getElementById('pwd-msg');
+  if(!p1||!p2){ msg.className='err-box'; msg.textContent=t('fa'); return; }
+  if(p1.length<4){ msg.className='err-box'; msg.textContent=t('setPwdShort'); return; }
+  if(p1!==p2){ msg.className='err-box'; msg.textContent=t('setPwdMismatch'); return; }
+  var users=JSON.parse(localStorage.getItem('sb_users')||'{}');
+  users[currentUser]=p1;
+  localStorage.setItem('sb_users',JSON.stringify(users));
+  msg.className='ok-box'; msg.textContent=t('setSaved');
+  document.getElementById('s-pwd1').value='';
+  document.getElementById('s-pwd2').value='';
+}
+
+function resetProgress(){
+  if(!confirm(t('setResetConfirm'))) return;
+  save('studyTime',0); save('tasksCompleted',0); save('sessions',0);
+  renderTab();
+}
+
+function showSettingsSaved(){
+  var el=document.createElement('div');
+  el.className='ok-box'; el.textContent=t('setSaved');
+  el.style.cssText='position:fixed;bottom:24px;right:24px;z-index:999;padding:12px 20px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.15)';
+  document.body.appendChild(el);
+  setTimeout(function(){ document.body.removeChild(el); },2000);
+}
+
+/* INIT */
 document.getElementById('login-lang').value=lang;
 refreshLogin();
 if(currentUser){
@@ -604,6 +723,3 @@ if(currentUser){
 </script>
 </body>
 </html>
-```
-
-Copy all of that, paste into GitHub replacing everything, then commit. ✅

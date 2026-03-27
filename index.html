@@ -601,7 +601,6 @@ function sendAI(){
   fetch(GEMINI_URL,{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    mode:'cors',
     body:JSON.stringify({contents:[{parts:parts}]})
   })
   .then(function(r){
